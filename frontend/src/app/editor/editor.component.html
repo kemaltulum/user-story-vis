@@ -1,0 +1,6 @@
+<div class="page-container">
+  <form [formGroup]="uploadForm" (ngSubmit)="onUpload()">
+    <input type="file" (change)="onFileChange($event)" />
+    <button type="submit" [disabled]="uploadForm.invalid">Upload</button>
+  </form>
+</div>
