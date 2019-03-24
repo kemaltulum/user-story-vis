@@ -1,8 +1,0 @@
-
-<div *ngIf="projects">
-    <a *ngFor="let project of projects" routerLink="{{project._id + '/editor'}}">
-        {{project.name}}
-    </a>
-</div>
-
-<router-outlet></router-outlet>

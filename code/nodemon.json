@@ -1,0 +1,8 @@
+{
+    "env": {
+        "MONGO_USER": "admin",
+        "MONGO_PASSWORD": "user-112358",
+        "MONGO_DB": "user-story-backend",
+        "SECRET_KEY": "super-secret-key-for-user-story-visualizer"
+    }
+}
