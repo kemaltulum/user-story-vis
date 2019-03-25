@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; 
 
 import './ProjectItem.css';
 
@@ -8,9 +9,7 @@ const projectItem = props => (
             <h1>{props.name}</h1>
         </div>
         <div>
-            <button className="btn" onClick={props.onAddStory.bind(this, props.projectId)}>
-                Add Story
-            </button>
+            <Link className="btn" to={props.projectId + "/stories"}>Stories</Link>
         </div>
     </li>
 );

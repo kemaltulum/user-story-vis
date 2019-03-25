@@ -59,7 +59,7 @@ var StorySchema = new Schema({
     }
 },{ timestamps: true });
 
-StorySchema.index({id_user: 1}, {project_id: 1});
+StorySchema.index({id_user: 1}, {project_id: 1}, {unique: true});
 var Story = mongoose.model('Story', StorySchema);
 
 module.exports = Story;

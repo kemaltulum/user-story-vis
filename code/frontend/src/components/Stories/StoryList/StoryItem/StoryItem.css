@@ -1,4 +1,4 @@
-.events__list-item {
+.projects__list-item {
   margin: 1rem 0;
   padding: 1rem;
   border: 1px solid #5101d1;
@@ -7,18 +7,22 @@
   align-items: center;
 }
 
-.events__list-item h1 {
+.projects__list-item a{
+  text-decoration: none;
+}
+
+.projects__list-item h1 {
   margin: 0;
   font-size: 1.5rem;
   color: #5101d1;
 }
 
-.events__list-item h2 {
+.projects__list-item h2 {
     margin: 0;
     font-size: 1rem;
     color: #7c7c7c;
 }
 
-.events__list-item p {
+.projects__list-item p {
     margin: 0;
 }

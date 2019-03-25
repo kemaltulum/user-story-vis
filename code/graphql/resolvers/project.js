@@ -24,12 +24,12 @@ module.exports = {
             const project = new Project({
                 name: args.name,
                 description: args.description,
-                creator: '5c9793cbb661723d2dc74be9'
+                creator: req.userId
             });
 
             const result = await project.save();
-            const createdEvent = transformProject(result);
-            const creator = await User.findById('5c9793cbb661723d2dc74be9');
+            const createdProject = transformProject(result);
+            const creator = await User.findById(req.userId);
 
             if (!creator) {
                 throw new Error('User not found.');
@@ -38,7 +38,7 @@ module.exports = {
             creator.createdProjects.push(project);
             await creator.save();
 
-            return createdEvent;
+            return createdProject;
         } catch (error) {
             throw error;
         }

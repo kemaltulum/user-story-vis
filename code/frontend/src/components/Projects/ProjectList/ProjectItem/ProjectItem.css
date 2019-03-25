@@ -7,6 +7,10 @@
   align-items: center;
 }
 
+.projects__list-item a{
+  text-decoration: none;
+}
+
 .projects__list-item h1 {
   margin: 0;
   font-size: 1.5rem;

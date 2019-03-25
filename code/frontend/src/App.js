@@ -5,6 +5,7 @@ import './App.css';
 
 import AuthPage from './pages/Auth';
 import ProjectsPage from './pages/Projects';
+import StoryPage from './pages/Story';
 import MainNavigation from './components/Navigation/MainNavigation';
 
 import AuthContext from './context/auth-context';
@@ -44,6 +45,9 @@ class App extends Component {
                 )}
                 {!this.state.token && (
                   <Route path="/auth" component={AuthPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/:project_id/stories" component={StoryPage} />
                 )}
                 {this.state.token && (
                   <Route path="/projects" component={ProjectsPage} />

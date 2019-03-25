@@ -153,9 +153,6 @@ class ProjectsPage extends Component {
     }
 
     render() {
-        const projectList = this.state.projects.map(project => {
-            return <div key={project._id}> {project.name} </div>;
-        });
         return (
             <React.Fragment>
                 {(this.state.creating || this.state.selectedEvent) && <Backdrop />}

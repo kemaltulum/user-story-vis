@@ -2,6 +2,7 @@ const DataLoader = require('dataloader');
 
 const Project = require('../../models/Project');
 const User = require('../../models/User');
+const Story = require('../../models/Story');
 
 const projectLoader = new DataLoader(projectIds => {
     return projects(projectIds);
@@ -10,6 +11,7 @@ const projectLoader = new DataLoader(projectIds => {
 const userLoader = new DataLoader(userIds => {
     return User.find({ _id: { $in: userIds } });
 });
+
 
 const projects = async projectIds => {
     try {
@@ -40,8 +42,16 @@ const user = async userId => {
     }
 };
 
+const project = async projectId => {
+    try {
+        const project = await projectLoader.load(projectId.toString());
+        return transformProject(project);
+    } catch (error) {
+        throw error;
+    }
+}
+
 const transformProject = (project) => {
-    console.log('transform', project.creator);
     return {
         ...project._doc,
         _id: project.id,
@@ -49,4 +59,13 @@ const transformProject = (project) => {
     }
 }
 
+const transformStory = (story) => {
+    return {
+        ...story._doc,
+        _id: story.id,
+        project_id: project.bind(this, project.creator)
+    }
+}
+
 exports.transformProject = transformProject;
+exports.transformStory = transformStory;
