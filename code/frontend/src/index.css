@@ -37,6 +37,17 @@ body {
   cursor: pointer;
 }
 
+.form-actions .btn.btn-secondary {
+  background: #700154;
+  border-color: #700154;
+}
+
+.form-actions .btn.btn-secondary:hover,
+.form-actions .btn.btn-secondary:active {
+  background: #92026e;
+  border-color: #92026e;
+}
+
 .form-actions button:hover,
 .form-actions button:active,
 .btn:hover,
