@@ -1,0 +1,16 @@
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# dependencies
+/node_modules
+
+nodemon.json
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+public
+
+*.zip
