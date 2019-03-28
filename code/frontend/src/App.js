@@ -16,12 +16,27 @@ class App extends Component {
     userId: null
   };
 
+  constructor(props) {
+    super(props);
+    if(localStorage.getItem('token') && localStorage.getItem('userId')){
+      this.state = { 
+        token: localStorage.getItem('token'), 
+        userId: localStorage.getItem('userId') 
+      };
+    }
+
+  }
+
   login = (token, userId, tokenExpiration) => {
     this.setState({ token: token, userId: userId });
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
   };
 
   logout = () => {
     this.setState({ token: null, userId: null });
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
   };
 
   render() {
@@ -34,8 +49,7 @@ class App extends Component {
               userId: this.state.userId,
               login: this.login,
               logout: this.logout
-            }}
-          >
+            }}>
             <MainNavigation />
             <main className="main-content">
               <Switch>
