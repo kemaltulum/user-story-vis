@@ -5,7 +5,11 @@ import AuthContext from '../context/auth-context';
 
 class AuthPage extends Component {
     state = {
-        isLogin: true
+        isLogin: true,
+        formError: {
+            exists: false,
+            message: 'No error'
+        }
     };
 
     static contextType = AuthContext;
@@ -73,11 +77,25 @@ class AuthPage extends Component {
         })
             .then(res => {
                 if (res.status !== 200 && res.status !== 201) {
-                    throw new Error('Failed!');
+                    this.setState({
+                        formError: {
+                            exists: true
+                        }
+                    });
                 }
                 return res.json();
             })
             .then(resData => {
+                if(this.state.formError.exists){
+                    this.setState({
+                        formError: {
+                            exists: true,
+                            message: resData.errors[0].message 
+                        }
+                    });
+                    throw new Error(resData.errors[0].message);
+                }
+
                 if (resData.data.login.token) {
                     this.context.login(
                         resData.data.login.token,
@@ -88,7 +106,8 @@ class AuthPage extends Component {
             })
             .catch(err => {
                 console.log(err);
-            });
+            });    
+        
     };
 
     render() {
@@ -98,15 +117,20 @@ class AuthPage extends Component {
                     <h2>{this.state.isLogin ? 'Login' : 'Sign Up'}</h2>
                     <div className="form-control">
                         <label htmlFor="email">E-Mail</label>
-                        <input type="email" id="email" ref={this.emailEl} />
+                        <input required type="email" id="email" ref={this.emailEl} />
                     </div>
                     <div className="form-control">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" ref={this.passwordEl} />
+                        <input required type="password" id="password" ref={this.passwordEl} />
                     </div>
                     <div className="form-actions">
+                        {this.state.formError.exists && 
+                        <div className="form-errors">
+                            {this.state.formError.message}
+                        </div>}
+                        
                         <button type="submit">{this.state.isLogin ? 'Login' : 'Sign Up'}</button>
-                        <button class="btn btn-secondary" type="button" onClick={this.switchModeHandler}>
+                        <button className="btn btn-secondary" type="button" onClick={this.switchModeHandler}>
                             Switch to {this.state.isLogin ? 'Sign Up' : 'Login'}
                         </button>
                     </div>

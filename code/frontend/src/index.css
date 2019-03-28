@@ -21,7 +21,13 @@ body {
 }
 
 .form-control {
-  margin-bottom: 1rem;
+  margin: 0 4px 1rem 4px;
+}
+
+.form-errors {
+  margin: 4px;
+  font-size: 0.9em;
+  color: rgba(151, 8, 8, 0.911);
 }
 
 .form-actions button,
