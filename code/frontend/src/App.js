@@ -9,6 +9,7 @@ import StoryPage from './pages/Story';
 import MainNavigation from './components/Navigation/MainNavigation';
 
 import AuthContext from './context/auth-context';
+import graphRequest from './services/graph';
 
 class App extends Component {
   state = {
@@ -19,11 +20,42 @@ class App extends Component {
   constructor(props) {
     super(props);
     if(localStorage.getItem('token') && localStorage.getItem('userId')){
-      this.state = { 
-        token: localStorage.getItem('token'), 
-        userId: localStorage.getItem('userId') 
+      const query = `
+        query VerifyToken($token: String!){
+          verifyToken(token: $token){
+            expired
+          }
+        }
+      `;
+
+      const variables = {
+        token: localStorage.getItem('token')
       };
+      
+      graphRequest(query, variables)
+        .then(res => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Token Expired!');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          if (!resData.data.verifyToken.expired) {
+            this.state = {
+              token: localStorage.getItem('token'),
+              userId: localStorage.getItem('userId')
+            };
+          } else {
+            this.logout();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });  
+      
     }
+
+
 
   }
 

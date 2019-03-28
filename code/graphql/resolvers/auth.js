@@ -41,5 +41,13 @@ module.exports = {
             }
         );
         return { userId: user.id, token: token, tokenExpiration: 1 };
+    },
+    verifyToken: ({token}) => {
+        return jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+            if (err && err.name === 'TokenExpiredError'){
+                return { expired: true };
+            }
+            return { expired: false };
+        });
     }
 };

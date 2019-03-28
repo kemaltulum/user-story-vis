@@ -46,6 +46,10 @@ type AuthData {
   tokenExpiration: Int!
 }
 
+type TokenData {
+  expired: Boolean!
+}
+
 input StoryInput {
   id_user: String!
   project_id: String!
@@ -61,6 +65,7 @@ type RootQuery {
     projects: [Project!]!
     login(email: String!, password: String!): AuthData!
     stories(projectId: String!): [Story!]!
+    verifyToken(token: String!): TokenData!
 }
 
 type RootMutation {
