@@ -3,7 +3,7 @@ import React from 'react';
 import './StoryItem.css';
 
 const storyItem = props => (
-    <li key={props.projectId} className="projects__list-item">
+    <li key={props.projectId} className="stories__list-item">
         <div>
             <p>{props.fullText}</p>
         </div>

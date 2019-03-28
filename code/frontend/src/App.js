@@ -42,6 +42,7 @@ class App extends Component {
         .then(resData => {
           if (!resData.data.verifyToken.expired) {
             console.log('Not expired!');
+            //TODO Find a correct way for token verification
             this.setState({
               token: localStorage.getItem('token'),
               userId: localStorage.getItem('userId')

@@ -1,28 +1,9 @@
-.projects__list-item {
+.stories__list-item {
   margin: 1rem 0;
   padding: 1rem;
   border: 1px solid #5101d1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
-.projects__list-item a{
+.stories__list-item a{
   text-decoration: none;
-}
-
-.projects__list-item h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #5101d1;
-}
-
-.projects__list-item h2 {
-    margin: 0;
-    font-size: 1rem;
-    color: #7c7c7c;
-}
-
-.projects__list-item p {
-    margin: 0;
 }

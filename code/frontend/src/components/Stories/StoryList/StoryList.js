@@ -18,7 +18,7 @@ const storyList = props => {
         );
     });
 
-    return <ul className="storys__list">{stories}</ul>;
+    return <ul className="stories__list">{stories}</ul>;
 };
 
 export default storyList;
