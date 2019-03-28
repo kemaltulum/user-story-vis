@@ -41,10 +41,12 @@ class App extends Component {
         })
         .then(resData => {
           if (!resData.data.verifyToken.expired) {
-            this.state = {
+            console.log('Not expired!');
+            this.setState({
               token: localStorage.getItem('token'),
               userId: localStorage.getItem('userId')
-            };
+            });
+            console.log(this.state);
           } else {
             this.logout();
           }
