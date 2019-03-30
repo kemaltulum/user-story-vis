@@ -20,6 +20,7 @@
 .stories__full-text {
   padding: 4px;
   border-radius: 4px;
+  line-height: 1.5em;
 }
 
 .stories__full-text span {
@@ -27,15 +28,15 @@
   border-radius: 4px;
 }
 .stories__full-text .actor {
-  background-color: rgb(152, 103, 197);
+  background-color: rgb(185, 126, 240);
 }
 
 .stories__full-text .action {
-  background-color: rgb(228, 167, 76);
+  background-color: rgb(245, 187, 100);
 }
 
 .stories__full-text .benefit {
-  background-color: rgb(119, 241, 103)
+  background-color: rgb(147, 247, 133)
 }
 
 .stories__list-item a{
