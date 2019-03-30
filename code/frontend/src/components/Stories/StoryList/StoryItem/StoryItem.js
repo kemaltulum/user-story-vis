@@ -5,12 +5,9 @@ import './StoryItem.css';
 const storyItem = props => (
     <li key={props.projectId} className={"stories__list-item " + (props.isParsed ? "correct" : "incorrect")}>
         <div className="stories__full-text">
-            <p>{props.fullText}</p>
-        </div>
-        <div className="stories__details">
-            <p className="stories__actor"><strong>Actor:</strong> {props.actor}</p>
-            <p className="stories__action"><strong>Action:</strong> {props.action}</p>
-            <p className="stories__benefit"><strong>Benefit:</strong> {props.benefit}</p>
+            As a <span className="actor">{props.actor}</span>,
+            I want to <span className="action">{props.action}</span>{props.action.endsWith(',') ? '' : ','} 
+            so that <span className="benefit">{props.benefit.charAt(0).toUpperCase() + props.benefit.slice(1)}</span> 
         </div>
     </li>
 );

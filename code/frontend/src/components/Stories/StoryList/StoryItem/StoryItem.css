@@ -18,15 +18,27 @@
 }
 
 .stories__full-text {
-  background-color: rgb(207, 107, 49);
   padding: 4px;
   border-radius: 4px;
+}
+
+.stories__full-text span {
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+.stories__full-text .actor {
+  background-color: rgb(152, 103, 197);
+}
+
+.stories__full-text .action {
+  background-color: rgb(228, 167, 76);
+}
+
+.stories__full-text .benefit {
+  background-color: rgb(119, 241, 103)
 }
 
 .stories__list-item a{
   text-decoration: none;
 }
 
-.stories__details strong{
-  color: rgb(97, 46, 16);
-}
