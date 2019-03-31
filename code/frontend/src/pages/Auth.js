@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 
 import './Auth.css';
-import AuthContext from '../context/auth-context';
+import { authActions } from '../actions/auth.actions';
 
 class AuthPage extends Component {
     state = {
-        isLogin: true,
-        formError: {
-            exists: false,
-            message: 'No error'
-        }
+        isLogin: true
     };
-
-    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
         this.emailEl = React.createRef();
         this.passwordEl = React.createRef();
+
+        this.switchModeHandler = this.switchModeHandler.bind(this);
     }
 
     switchModeHandler = () => {
@@ -35,78 +33,13 @@ class AuthPage extends Component {
             return;
         }
 
-        let requestBody = {
-            query: `
-        query Login($email: String!, $password: String!) {
-          login(email: $email, password: $password) {
-            userId
-            token
-            tokenExpiration
-          }
+        const { dispatch } = this.props;
+
+        if(this.state.isLogin) {
+            dispatch(authActions.login(email, password));
+        } else {
+            dispatch(authActions.signup(email, password));
         }
-      `,
-            variables: {
-                email: email,
-                password: password
-            }
-        };
-
-        if (!this.state.isLogin) {
-            requestBody = {
-                query: `
-          mutation CreateUser($email: String!, $password: String!) {
-            createUser(userInput: {email: $email, password: $password}) {
-              _id
-              email
-            }
-          }
-        `,
-                variables: {
-                    email: email,
-                    password: password
-                }
-            };
-        }
-
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => {
-                if (res.status !== 200 && res.status !== 201) {
-                    this.setState({
-                        formError: {
-                            exists: true
-                        }
-                    });
-                }
-                return res.json();
-            })
-            .then(resData => {
-                if(this.state.formError.exists){
-                    this.setState({
-                        formError: {
-                            exists: true,
-                            message: resData.errors[0].message 
-                        }
-                    });
-                    throw new Error(resData.errors[0].message);
-                }
-
-                if (resData.data.login.token) {
-                    this.context.login(
-                        resData.data.login.token,
-                        resData.data.login.userId,
-                        resData.data.login.tokenExpiration
-                    );
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });    
         
     };
 
@@ -124,9 +57,9 @@ class AuthPage extends Component {
                         <input required type="password" id="password" ref={this.passwordEl} />
                     </div>
                     <div className="form-actions">
-                        {this.state.formError.exists && 
+                        {this.state.error && 
                         <div className="form-errors">
-                            {this.state.formError.message}
+                            {this.state.error}
                         </div>}
                         
                         <button type="submit">{this.state.isLogin ? 'Login' : 'Sign Up'}</button>
@@ -140,4 +73,12 @@ class AuthPage extends Component {
     }
 }
 
-export default AuthPage;
+function mapStateToProps(state) {
+    const { error, token, userId } = state.auth;
+    return {
+        error, token, userId
+    }
+}
+
+export default connect(mapStateToProps)(AuthPage)
+

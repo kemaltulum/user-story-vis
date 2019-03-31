@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import './App.css';
 
@@ -7,8 +8,8 @@ import AuthPage from './pages/Auth';
 import ProjectsPage from './pages/Projects';
 import StoryPage from './pages/Story';
 import MainNavigation from './components/Navigation/MainNavigation';
+import { authActions }  from './actions/auth.actions';
 
-import AuthContext from './context/auth-context';
 import graphRequest from './services/graph';
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    /*
     if(localStorage.getItem('token') && localStorage.getItem('userId')){
       const query = `
         query VerifyToken($token: String!){
@@ -57,6 +59,7 @@ class App extends Component {
         });  
       
     }
+    */
 
 
 
@@ -78,38 +81,46 @@ class App extends Component {
     return (
       <BrowserRouter>
         <React.Fragment>
-          <AuthContext.Provider
-            value={{
-              token: this.state.token,
-              userId: this.state.userId,
-              login: this.login,
-              logout: this.logout
-            }}>
-            <MainNavigation />
+            <MainNavigation token={this.props.token} logout={this.props.logout}/>
             <main className="main-content">
               <Switch>
-                {this.state.token && <Redirect from="/" to="/projects" exact />}
-                {this.state.token && (
+                {this.props.token && <Redirect from="/" to="/projects" exact />}
+              {this.props.token && (
                   <Redirect from="/auth" to="/projects" exact />
                 )}
-                {!this.state.token && (
+              {!this.props.token && (
                   <Route path="/auth" component={AuthPage} />
                 )}
-                {this.state.token && (
+              {this.props.token && (
                   <Route path="/:project_id/stories" component={StoryPage} />
                 )}
-                {this.state.token && (
+              {this.props.token && (
                   <Route path="/projects" component={ProjectsPage} />
                 )}
-                {!this.state.token && <Redirect to="/auth" exact />}
+              {!this.props.token && <Redirect to="/auth" exact />}
               </Switch>
             </main>
-          </AuthContext.Provider>
         </React.Fragment>
       </BrowserRouter>
     );
   }
 }
 
+function mapStateToProps(state){
+  const {token, userId} = state.auth;
+  return {
+    token,
+    userId
+  };
+}
 
-export default App;
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => {
+      dispatch(authActions.logout());
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+

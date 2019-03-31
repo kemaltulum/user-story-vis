@@ -5,7 +5,7 @@ import Modal from '../components/Modal/Modal';
 import Spinner from '../components/Spinner/Spinner';
 import StoryList from '../components/Stories/StoryList/StoryList';
 
-import AuthContext from '../context/auth-context';
+import { connect } from 'react-redux';
 
 import './Story.css';
 
@@ -16,8 +16,6 @@ class StoryPage extends Component {
         stories: [],
         isLoading: false
     }
-
-    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
@@ -47,7 +45,7 @@ class StoryPage extends Component {
             }
         };
 
-        const token = this.context.token;
+        const token = this.props.token;
 
         fetch('http://localhost:8000/graphql', {
             method: 'POST',
@@ -144,7 +142,7 @@ class StoryPage extends Component {
         }
         
 
-        const token = this.context.token;
+        const token = this.props.token;
 
         fetch('http://localhost:8000/graphql', {
             method: 'POST',
@@ -218,7 +216,7 @@ class StoryPage extends Component {
                         </form>
                     </Modal>
                 )}
-                {this.context.token && (
+                {this.props.token && (
                     <div className="stories-control">
                         <p>Add stories to your project!</p>
                         <button className="btn" onClick={this.startAddStoryHandlerSingle}>
@@ -243,4 +241,11 @@ class StoryPage extends Component {
     }
 }
 
-export default StoryPage;
+function mapStateToProps(state) {
+    const { token } = state.auth;
+    return {
+        token
+    };
+}
+
+export default connect(mapStateToProps)(StoryPage);

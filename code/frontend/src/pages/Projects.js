@@ -5,6 +5,9 @@ import Backdrop from '../components/Backdrop/Backdrop';
 import Spinner from '../components/Spinner/Spinner';
 import ProjectList from '../components/Projects/ProjectList/ProjectList';
 
+import { connect } from 'react-redux';
+
+
 import AuthContext from '../context/auth-context';
 import './Projects.css';
 
@@ -15,8 +18,6 @@ class ProjectsPage extends Component {
         isLoading: false
     };
     isActive = true;
-
-    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
@@ -60,7 +61,7 @@ class ProjectsPage extends Component {
             }
         };
 
-        const token = this.context.token;
+        const token = this.props.token;
 
         fetch('http://localhost:8000/graphql', {
             method: 'POST',
@@ -181,7 +182,7 @@ class ProjectsPage extends Component {
                         </form>
                     </Modal>
                 )}
-                {this.context.token && (
+                {this.props.token && (
                     <div className="events-control">
                         <p>Add your project!</p>
                         <button className="btn" onClick={this.startCreateEventHandler}>
@@ -202,4 +203,11 @@ class ProjectsPage extends Component {
     }
 }
 
-export default ProjectsPage;
+function mapStateToProps(state){
+    const {token} = state.auth;
+    return {
+        token
+    };
+}
+
+export default connect(mapStateToProps)(ProjectsPage);
