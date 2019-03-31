@@ -7,6 +7,7 @@ import './App.css';
 import AuthPage from './pages/Auth';
 import ProjectsPage from './pages/Projects';
 import StoryPage from './pages/Story';
+import VisualizePage from './pages/Visualize';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 
@@ -97,6 +98,9 @@ class App extends Component {
               {this.props.token && (
                   <Route path="/projects" component={ProjectsPage} />
                 )}
+              {this.props.token && (
+                <Route path="/visualize" component={VisualizePage} />
+              )}
               {!this.props.token && <Redirect to="/auth" exact />}
               </Switch>
             </main>

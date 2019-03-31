@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^16.8.5",
+    "react-d3-tree": "^1.12.3",
     "react-dom": "^16.8.5",
     "react-redux": "^6.0.1",
     "react-router-dom": "^5.0.0",
