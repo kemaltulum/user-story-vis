@@ -2,6 +2,19 @@ const storyReducer = (state = {
     stories: []
 }, action) => {
     switch (action.type) {
+        case 'STORIES_REQUEST':
+            state = {
+                ...state,
+                isLoading: true
+            };
+            break;
+        case 'STORIES_FAILURE':
+            state = {
+                ...state,
+                ...action.payload,
+                isLoading: false
+            };
+            break;
         case 'GET_STORIES':
             state = {
                 ...state,
@@ -9,17 +22,18 @@ const storyReducer = (state = {
                 isLoading: false
             };
             break;
-        case 'GET_STORIES_REQUEST':
+        case 'ADD_STORY_SINGLE':
             state = {
                 ...state,
-                isLoading: true
+                isLoading: false,
+                stories: [...state.stories, action.payload.newStory]
             };
             break;
-        case 'GET_STORIES_FAILURE':
+        case 'ADD_STORY_BULK':
             state = {
                 ...state,
-                ...action.payload,
-                isLoading: false
+                isLoading: false,
+                stories: [...state.stories, action.payload.newStories]
             };
             break;
         default:

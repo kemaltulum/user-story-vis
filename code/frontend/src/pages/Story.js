@@ -91,84 +91,17 @@ class StoryPage extends Component {
 
         let requestBody;
 
+        const projectId = this.props.match.params.project_id;
+        const token = this.props.token;
+
         if(this.state.modalType === 'single'){
             const fullText = this.storyElRef.current.value;
             const idUser = this.idUserElRef.current.value;
-
-
-            requestBody = {
-                query: `
-                    mutation addStory($full_text: String!, $id_user: String!, $project_id: String!) {
-                        addStory(storyInput : {full_text: $full_text, id_user: $id_user, project_id: $project_id}) {
-                        _id
-                        full_text
-                        actor
-                        action
-                        benefit
-                        is_parsed
-                        }
-                    }
-                    `,
-                variables: {
-                    full_text: fullText,
-                    id_user: idUser,
-                    project_id: this.props.match.params.project_id
-                }
-            };
+            this.props.addStorySingle(projectId, fullText, idUser, token);
         } else if(this.state.modalType === 'raw'){
             const rawText = this.rawTextElRef.current.value;
-            console.log(rawText);
-
-            requestBody = {
-                query: `
-                    mutation addStories($rawText: String!, $project_id: String!) {
-                        addStoryBulkRaw(rawText: $rawText, projectId: $project_id) {
-                        _id
-                        full_text
-                        actor
-                        action
-                        benefit
-                        is_parsed
-                        }
-                    }
-                    `,
-                variables: {
-                    rawText: rawText,
-                    project_id: this.props.match.params.project_id
-                }
-            };
+            this.props.addStoryBulkRaw(projectId, rawText, token);
         }
-        
-
-        const token = this.props.token;
-
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + token
-            }
-        })
-            .then(res => {
-                if (res.status !== 200 && res.status !== 201) {
-                    throw new Error('Failed!');
-                }
-                return res.json();
-            })
-            .then(resData => {
-               this.setState(prevState => {
-                   const stories = prevState.stories;
-                   stories.push({
-                       ...resData.data.addStory
-                   })
-                   return {stories: stories, modalOpened: false};
-               });
-            })
-            .catch(err => {
-                console.log(err);
-                this.setState({ modalOpened: false });
-            });
     }
 
     render() {
@@ -255,6 +188,12 @@ function mapDispatchToProps(dispatch) {
     return {
         getStories: (projectId, token) => {
             dispatch(storyActions.getStories(projectId, token));
+        },
+        addStorySingle: (projectId, fullText, idUser, token) => {
+            dispatch(storyActions.addStorySingle(projectId, fullText, idUser, token));
+        },
+        addStoryBulkRaw: (projectId, rawText, token) => {
+            dispatch(storyActions.addStoryBulkRaw(projectId, rawText, token));
         }
     };
 }

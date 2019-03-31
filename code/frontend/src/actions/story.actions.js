@@ -3,7 +3,7 @@ import { storyService } from '../services';
 function getStories(projectId, token) {
     return dispatch => {
         dispatch({
-            type: 'GET_STORIES_REQUEST',
+            type: 'STORIES_REQUEST',
             payload: {}
         });
         storyService.getStories(projectId, token)
@@ -16,7 +16,7 @@ function getStories(projectId, token) {
                 },
                 error => {
                     dispatch({
-                        type: 'GET_STORIES_FAILURE',
+                        type: 'STORIES_FAILURE',
                         payload: { error }
                     });
                 }
@@ -24,6 +24,56 @@ function getStories(projectId, token) {
     }
 }
 
+function addStorySingle(projectId, fullText, idUser, token) {
+    return dispatch => {
+        dispatch({
+            type: 'STORIES_REQUEST',
+            payload: {}
+        });
+        storyService.addStorySingle(projectId, fullText, idUser, token)
+            .then(
+                newStory => {
+                    dispatch({
+                        type: 'ADD_STORY_SINGLE',
+                        payload: { newStory }
+                    });
+                },
+            error => {
+                dispatch({
+                    type: 'STORIES_FAILURE',
+                    payload: { error }
+                });
+            }
+            )
+    }
+}
+
+function addStoryBulkRaw(projectId, rawText, token) {
+    return dispatch => {
+        dispatch({
+            type: 'STORIES_REQUEST',
+            payload: {}
+        });
+        storyService.addStoryBulkRaw(projectId, rawText, token)
+            .then(
+                newStories => {
+                    dispatch({
+                        type: 'ADD_STORY_BULK',
+                        payload: { newStories }
+                    });
+                },
+                error => {
+                    dispatch({
+                        type: 'STORIES_FAILURE',
+                        payload: { error }
+                    });
+                }
+            )
+    }
+}
+
 export const storyActions = {
-    getStories
+    getStories,
+    addStorySingle,
+    addStoryBulkRaw
 };
