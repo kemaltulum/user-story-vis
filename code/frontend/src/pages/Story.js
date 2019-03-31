@@ -176,46 +176,48 @@ class StoryPage extends Component {
     render() {
         return (
             <React.Fragment>
-                {(this.state.modalOpened && this.state.modalType === 'single') && <Backdrop />}
-                {this.state.modalOpened && (
-                    <Modal
-                        title="Add Story"
-                        canCancel
-                        canConfirm
-                        onCancel={this.modalCancelHandler}
-                        onConfirm={this.modalConfirmHandler}
-                        confirmText="Add"
-                    >
-                        <form>
-                            <div className="form-control">
-                                <label htmlFor="story">User Story</label>
-                                <input type="text" id="story" ref={this.storyElRef} />
-                            </div>
-                            <div className="form-control">
-                                <label htmlFor="id_user">Story ID</label>
-                                <input type="text" id="id_user" ref={this.idUserElRef} />
-                            </div>
-                        </form>
-                    </Modal>
-                )}
-                {(this.state.modalOpened && this.state.modalType === 'raw') && <Backdrop />}
-                {this.state.modalOpened && (
-                    <Modal
-                        title="Add Story Raw Text"
-                        canCancel
-                        canConfirm
-                        onCancel={this.modalCancelHandler}
-                        onConfirm={this.modalConfirmHandler}
-                        confirmText="Add"
-                    >
-                        <form>
-                            <div className="form-control">
-                                <label htmlFor="story">User Story</label>
-                                <textarea type="text" id="story" rows="10" ref={this.rawTextElRef} />
-                            </div>
-                        </form>
-                    </Modal>
-                )}
+                {(this.state.modalOpened && this.state.modalType === 'single') && 
+                    <React.Fragment>
+                        <Backdrop />
+                        <Modal
+                            title="Add Story"
+                            canCancel
+                            canConfirm
+                            onCancel={this.modalCancelHandler}
+                            onConfirm={this.modalConfirmHandler}
+                            confirmText="Add">
+                            <form>
+                                <div className="form-control">
+                                    <label htmlFor="story">User Story</label>
+                                    <input type="text" id="story" ref={this.storyElRef} />
+                                </div>
+                                <div className="form-control">
+                                    <label htmlFor="id_user">Story ID</label>
+                                    <input type="text" id="id_user" ref={this.idUserElRef} />
+                                </div>
+                            </form>
+                        </Modal>
+                    </React.Fragment>
+                }
+                {(this.state.modalOpened && this.state.modalType === 'raw') && 
+                    <React.Fragment>
+                        <Backdrop />
+                        <Modal
+                            title="Add Story Raw Text"
+                            canCancel
+                            canConfirm
+                            onCancel={this.modalCancelHandler}
+                            onConfirm={this.modalConfirmHandler}
+                            confirmText="Add">
+                            <form>
+                                <div className="form-control">
+                                    <label htmlFor="story">User Story</label>
+                                    <textarea type="text" id="story" rows="10" ref={this.rawTextElRef} />
+                                </div>
+                            </form>
+                        </Modal>
+                    </React.Fragment>
+                }
                 {this.props.token && (
                     <div className="stories-control">
                         <p>Add stories to your project!</p>
