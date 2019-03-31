@@ -33,12 +33,10 @@ class AuthPage extends Component {
             return;
         }
 
-        const { dispatch } = this.props;
-
         if(this.state.isLogin) {
-            dispatch(authActions.login(email, password));
+            this.props.login(email, password);
         } else {
-            dispatch(authActions.signup(email, password));
+            this.props.signup(email, password);
         }
         
     };
@@ -80,5 +78,16 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(AuthPage)
+function mapDispatchToProps(dispatch) {
+    return {
+        login: (email, password) => {
+            dispatch(authActions.login(email, password));
+        },
+        signup: (email, password) => {
+            dispatch(authActions.signup(email, password));
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthPage)
 

@@ -7,8 +7,6 @@ import ProjectList from '../components/Projects/ProjectList/ProjectList';
 
 import { connect } from 'react-redux';
 
-
-import AuthContext from '../context/auth-context';
 import './Projects.css';
 
 class ProjectsPage extends Component {

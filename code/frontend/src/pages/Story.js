@@ -7,14 +7,13 @@ import StoryList from '../components/Stories/StoryList/StoryList';
 
 import { connect } from 'react-redux';
 
+import { storyActions } from '../actions/story.actions';
 import './Story.css';
 
 class StoryPage extends Component {
     state = {
         modelOpened: false,
-        modalType: 'single',
-        stories: [],
-        isLoading: false
+        modalType: 'single'
     }
 
     constructor(props) {
@@ -73,8 +72,7 @@ class StoryPage extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.match);
-        this.fetchStories();
+        this.props.getStories(this.props.match.params.project_id, this.props.token);
     }
 
     startAddStoryHandlerSingle = () => {
@@ -230,11 +228,11 @@ class StoryPage extends Component {
                     </div>
                 )}
                 
-                {this.state.isLoading ? (
+                {this.props.isLoading ? (
                     <Spinner />
                 ) : (
                         <StoryList
-                            stories={this.state.stories}
+                            stories={this.props.stories}
                         />
                     )}
                 
@@ -245,9 +243,20 @@ class StoryPage extends Component {
 
 function mapStateToProps(state) {
     const { token } = state.auth;
+    const { stories, isLoading } = state.story; 
     return {
-        token
+        token,
+        stories,
+        isLoading
     };
 }
 
-export default connect(mapStateToProps)(StoryPage);
+function mapDispatchToProps(dispatch) {
+    return {
+        getStories: (projectId, token) => {
+            dispatch(storyActions.getStories(projectId, token));
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StoryPage);
