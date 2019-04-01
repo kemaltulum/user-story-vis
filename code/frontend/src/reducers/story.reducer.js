@@ -33,7 +33,7 @@ const storyReducer = (state = {
             state = {
                 ...state,
                 isLoading: false,
-                stories: [...state.stories, action.payload.newStories]
+                stories: [...state.stories, ...action.payload.newStories]
             };
             break;
         default:

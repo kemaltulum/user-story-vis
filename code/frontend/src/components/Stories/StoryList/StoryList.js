@@ -14,6 +14,7 @@ const storyList = props => {
                 action={story.action}
                 benefit={story.benefit}
                 isParsed={story.is_parsed}
+                idUser={story.id_user}
             />
         );
     });

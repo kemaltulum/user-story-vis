@@ -12,6 +12,7 @@ function getStories(projectId, token){
             action
             benefit
             is_parsed
+            id_user
             }
         }
     `;
@@ -40,6 +41,7 @@ function addStorySingle(projectId, fullText, idUser, token) {
             action
             benefit
             is_parsed
+            id_user
             }
         }
     `;
@@ -69,6 +71,7 @@ function addStoryBulkRaw(projectId, rawText, token) {
             action
             benefit
             is_parsed
+            id_user
             }
         }
     `;
@@ -81,7 +84,7 @@ function addStoryBulkRaw(projectId, rawText, token) {
     return graph(query, variables, token)
         .then(handleResponse)
         .then(responseData => {
-            const newStories = responseData.data.addStories;
+            const newStories = responseData.data.addStoryBulkRaw;
             return newStories;
         });
 }

@@ -3,6 +3,7 @@
   padding: 1rem;
   font-size: 1em;
   border: 2px solid #5101d1;
+  position: relative;
 }
 
 .stories__list-item p {
@@ -41,5 +42,22 @@
 
 .stories__list-item a{
   text-decoration: none;
+}
+
+.stories_id-user{
+  vertical-align: middle;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #5101d1;
+  border-radius: 0 0 0 100%;
+  box-sizing: border-box;
+  padding-top: 2px;
+  padding-left: 4px;
+  width: 32px;
+  height: 32px;
+  color: white;
+  font-weight: bold;
 }
 
