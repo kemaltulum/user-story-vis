@@ -9,6 +9,7 @@ const projectItem = props => (
             <h1>{props.name}</h1>
         </div>
         <div>
+            <Link className="btn" to={props.projectId + "/visualize"}>Visualize</Link>
             <Link className="btn" to={props.projectId + "/stories"}>Stories</Link>
         </div>
     </li>

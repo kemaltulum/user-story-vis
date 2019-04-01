@@ -99,7 +99,7 @@ class App extends Component {
                   <Route path="/projects" component={ProjectsPage} />
                 )}
               {this.props.token && (
-                <Route path="/visualize" component={VisualizePage} />
+                <Route path="/:project_id/visualize" component={VisualizePage} />
               )}
               {!this.props.token && <Redirect to="/auth" exact />}
               </Switch>

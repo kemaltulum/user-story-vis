@@ -23,54 +23,6 @@ class StoryPage extends Component {
         this.rawTextElRef = React.createRef();
     }
 
-    fetchStories() {
-        this.setState({isLoading: true});
-
-        const requestBody = {
-            query: `
-                    query getStories($project_id: String!) {
-                        stories(projectId: $project_id) {
-                        _id
-                        full_text
-                        actor
-                        action
-                        benefit
-                        is_parsed
-                        }
-                    }
-                    `,
-            variables: {
-                project_id: this.props.match.params.project_id
-            }
-        };
-
-        const token = this.props.token;
-
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + token
-            }
-        })
-            .then(res => {
-                if (res.status !== 200 && res.status !== 201) {
-                    throw new Error('Failed!');
-                }
-                return res.json();
-            })
-            .then(resData => {
-                const stories = resData.data.stories;
-                this.setState({ stories: stories, isLoading: false });
-
-            })
-            .catch(err => {
-                console.log(err);
-                this.setState({ isLoading: false });
-            });
-    }
-
     componentDidMount(){
         this.props.getStories(this.props.match.params.project_id, this.props.token);
     }
