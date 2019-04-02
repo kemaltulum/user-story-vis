@@ -29,6 +29,41 @@ function getStories(projectId, token){
         });
 }
 
+function createStoryTrees(stories) {
+    let treeData = {
+        name: 'Actor',
+        children: []
+    };
+
+    let actors = [];
+
+    for (let i = 0; i < stories.length; i++) {
+        let story = stories[i];
+        let actor = story.actor;
+
+        if (!actors.includes(actor)) {
+            actors.push(actor);
+            treeData.children.push({ name: actor, _collapsed:true, children: [{ name: story.action }] });
+        } else if(story.action) {
+            for (let j = 0; j < treeData.children.length; j++) {
+                let child = treeData.children[j];
+
+                if (child.name === actor) {
+                    child.children.push({ name: story.action });
+                }
+            }
+        }
+    }
+    return [treeData];
+}
+
+function getStoriesTree(projectId, token) {
+    return getStories(projectId, token)
+        .then(resData => {
+            return createStoryTrees(resData);
+        });
+}
+
 function addStorySingle(projectId, fullText, idUser, token) {
 
     const query =
@@ -89,6 +124,7 @@ function addStoryBulkRaw(projectId, rawText, token) {
         });
 }
 
+
 function handleResponse(res) {
     let errorExists = false;
     if (res.status !== 200 && res.status !== 201) {
@@ -108,5 +144,6 @@ function handleResponse(res) {
 export const storyService = {
     getStories,
     addStorySingle,
-    addStoryBulkRaw
+    addStoryBulkRaw,
+    getStoriesTree
 };

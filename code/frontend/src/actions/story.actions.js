@@ -24,6 +24,30 @@ function getStories(projectId, token) {
     }
 }
 
+function getStoriesTree(projectId, token) {
+    return dispatch => {
+        dispatch({
+            type: 'STORIES_REQUEST',
+            payload: {}
+        });
+        storyService.getStoriesTree(projectId, token)
+            .then(
+                storiesTree => {
+                    dispatch({
+                        type: 'GET_STORIES_TREE',
+                        payload: { storiesTree }
+                    });
+                },
+                error => {
+                    dispatch({
+                        type: 'STORIES_FAILURE',
+                        payload: { error }
+                    });
+                }
+            );
+    }
+}
+
 function addStorySingle(projectId, fullText, idUser, token) {
     return dispatch => {
         dispatch({
@@ -74,6 +98,7 @@ function addStoryBulkRaw(projectId, rawText, token) {
 
 export const storyActions = {
     getStories,
+    getStoriesTree,
     addStorySingle,
     addStoryBulkRaw
 };

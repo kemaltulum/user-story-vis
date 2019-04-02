@@ -11,7 +11,7 @@ module.exports = (query, variables={}, token=null) => {
 
     headers.Authorization = 'Bearer ' + token;
 
-    return fetch('http://localhost:8000/graphql', {
+    return fetch('/graphql', {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: headers

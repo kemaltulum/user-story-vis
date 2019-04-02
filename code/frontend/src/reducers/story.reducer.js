@@ -1,5 +1,6 @@
 const storyReducer = (state = {
-    stories: []
+    stories: [],
+    storiesTree: [{name: 'Actor'}]
 }, action) => {
     switch (action.type) {
         case 'STORIES_REQUEST':
@@ -16,6 +17,13 @@ const storyReducer = (state = {
             };
             break;
         case 'GET_STORIES':
+            state = {
+                ...state,
+                ...action.payload,
+                isLoading: false
+            };
+            break;
+        case 'GET_STORIES_TREE':
             state = {
                 ...state,
                 ...action.payload,

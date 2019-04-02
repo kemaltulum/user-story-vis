@@ -3,6 +3,11 @@ import Tree from 'react-d3-tree';
 
 import './Visualize.css';
 
+import { connect } from 'react-redux';
+
+import Spinner from '../components/Spinner/Spinner';
+import { storyActions } from '../actions/story.actions';
+
 const myTreeData = [
     {
         name: 'Actor',
@@ -14,7 +19,7 @@ const myTreeData = [
                 name: 'Admin',
             }
         ],
-    },
+    }
 ];
 
 
@@ -28,6 +33,7 @@ class VisualizePage extends Component {
     }
 
     componentDidMount() {
+        this.props.getStoriesTree(this.props.match.params.project_id, this.props.token);
         const dimensions = this.treeContainer.current.getBoundingClientRect();
         this.setState({
             translate: {
@@ -37,18 +43,41 @@ class VisualizePage extends Component {
         });
     }
 
-    render(){
+    render() {
         return (
             <Fragment >
-                <div ref={this.treeContainer} className="visualize-container">
+                {this.props.isLoading ? (
+                    <Spinner />
+                ) : (
+                        <div ref={this.treeContainer} className="visualize-container">
 
-                <Tree data={myTreeData} 
-                    translate={this.state.translate}
-                    orientation={'horizontal'}/>
+                            <Tree data={this.props.storiesTree}
+                                translate={this.state.translate}
+                                orientation={'vertical'} />
 
-            </div>
-        </Fragment>);
+                        </div>
+                    )}
+
+            </Fragment>);
     }
 }
 
-export default VisualizePage;
+function mapStateToProps(state) {
+    const { token } = state.auth;
+    const { storiesTree, isLoading } = state.story;
+    return {
+        token,
+        storiesTree,
+        isLoading
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getStoriesTree: (projectId, token) => {
+            dispatch(storyActions.getStoriesTree(projectId, token));
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VisualizePage);

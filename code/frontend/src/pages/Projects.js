@@ -61,7 +61,7 @@ class ProjectsPage extends Component {
 
         const token = this.props.token;
 
-        fetch('http://localhost:8000/graphql', {
+        fetch('/graphql', {
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {
@@ -116,7 +116,7 @@ class ProjectsPage extends Component {
         `
         };
 
-        fetch('http://localhost:8000/graphql', {
+        fetch('/graphql', {
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {
