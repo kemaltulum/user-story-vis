@@ -1,4 +1,6 @@
-module.exports = (query, variables={}, token=null) => {
+import { config } from '../config';
+
+export default (query, variables={}, token=null) => {
 
     const requestBody = {
         query: query,
@@ -11,7 +13,13 @@ module.exports = (query, variables={}, token=null) => {
 
     headers.Authorization = 'Bearer ' + token;
 
-    return fetch('/graphql', {
+    let endpoint = '/graphql';
+
+    if(!config.isProd){
+        endpoint = 'http://localhost:8000/graphql'
+    }
+
+    return fetch(endpoint, {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: headers
