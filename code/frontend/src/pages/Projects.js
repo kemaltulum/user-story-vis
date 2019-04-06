@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner/Spinner';
 import ProjectList from '../components/Projects/ProjectList/ProjectList';
 
 import { connect } from 'react-redux';
+import { projectActions } from '../actions/project.actions';
 
 import './Projects.css';
 
@@ -43,104 +44,15 @@ class ProjectsPage extends Component {
             return;
         }
 
-        const requestBody = {
-            query: `
-          mutation CreateProject($name: String!, $desc: String!) {
-            createProject(name: $name, description: $desc) {
-              _id
-              name
-              description
-            }
-          }
-        `,
-            variables: {
-                name: name,
-                desc: description
-            }
-        };
-
-        const token = this.props.token;
-
-        fetch('/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + token
-            }
-        })
-            .then(res => {
-                if (res.status !== 200 && res.status !== 201) {
-                    throw new Error('Failed!');
-                }
-                return res.json();
-            })
-            .then(resData => {
-                this.setState(prevState => {
-                    const updatedProjects = [...prevState.projects];
-                    updatedProjects.push({
-                        _id: resData.data.createProject._id,
-                        name: resData.data.createProject.name,
-                        description: resData.data.createProject.description,
-                        creator: {
-                            _id: this.context.userId
-                        }
-                    });
-                    return { projects: updatedProjects };
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
+        this.props.createProject(name, description, this.props.token);
+    }
 
     modalCancelHandler = () => {
         this.setState({ creating: false });
-    };
+    }
 
     fetchProjects() {
-        this.setState({ isLoading: true });
-        const requestBody = {
-            query: `
-          query {
-            projects {
-              _id
-              name
-              description
-              creator {
-                _id
-                email
-              }
-            }
-          }
-        `
-        };
-
-        fetch('/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => {
-                if (res.status !== 200 && res.status !== 201) {
-                    throw new Error('Failed!');
-                }
-                return res.json();
-            })
-            .then(resData => {
-                const projects = resData.data.projects;
-                if (this.isActive) {
-                    this.setState({ projects: projects, isLoading: false });
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                if (this.isActive) {
-                    this.setState({ isLoading: false });
-                }
-            });
+        this.props.getProjects(this.props.token);
     }
 
     addStoryHandler(projectId) {
@@ -154,7 +66,7 @@ class ProjectsPage extends Component {
     render() {
         return (
             <React.Fragment>
-                {(this.state.creating || this.state.selectedEvent) && <Backdrop />}
+                {(this.state.creating) && <Backdrop />}
                 {this.state.creating && (
                     <Modal
                         title="Add Project"
@@ -192,7 +104,7 @@ class ProjectsPage extends Component {
                     <Spinner />
                 ) : (
                      <ProjectList 
-                        projects={this.state.projects}
+                        projects={this.props.projects}
                         onAddStory={this.addStoryHandler}
                      />  
                     )}
@@ -201,11 +113,26 @@ class ProjectsPage extends Component {
     }
 }
 
-function mapStateToProps(state){
-    const {token} = state.auth;
+
+function mapStateToProps(state) {
+    const { token } = state.auth;
+    const { projects, isLoading } = state.project;
     return {
-        token
+        token,
+        projects,
+        isLoading
     };
 }
 
-export default connect(mapStateToProps)(ProjectsPage);
+function mapDispatchToProps(dispatch) {
+    return {
+        getProjects: (token) => {
+            dispatch(projectActions.getProjects(token));
+        },
+        createProject: (name, description, token) => {
+            dispatch(projectActions.createProject(name, description, token));
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPage);

@@ -11,8 +11,6 @@ import VisualizePage from './pages/Visualize';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 
-import graphRequest from './services/graph';
-
 class App extends Component {
   state = {
     token: null,
