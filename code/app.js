@@ -43,6 +43,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 //const api = require('./routes/index');
 //app.use('/api', api);
 
+app.get('/api', (req, res) => {
+  res.json({status: "SUCCESSFUL"})
+});
 
 // Mongoose Setup
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds163825.mlab.com:63825/${process.env.MONGO_DB}`);
