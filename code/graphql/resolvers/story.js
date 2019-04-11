@@ -24,7 +24,7 @@ module.exports = {
         try {
 
             const fullText = args.storyInput.full_text;
-            const storyParsed = parseSingle(fullText);
+            const storyParsed = await parseSingle(fullText);
 
 
             const story = new Story({
@@ -44,11 +44,8 @@ module.exports = {
     addStoryBulkRaw: async (args) => {
         try {
             const rawText = args.rawText;
-            console.log(rawText);
-            const storiesParsed = parseAllRaw(rawText);
+            const storiesParsed = await parseAllRaw(rawText);
 
-            console.log(storiesParsed);
-            
             const stories = await Story.insertMany(storiesParsed.map(story => {return {...story, project_id: args.projectId}}));
 
             return stories.map(story => {

@@ -3,14 +3,50 @@ var csv = require("fast-csv");
 const formidable = require('formidable')
 var Story = require('../models/Story');
 
+const util_ = require('util');
+const exec = util_.promisify(require('child_process').exec);
 
 
-function parse(story_single) {
+
+
+async function parse(story_single){
     /*
         As a Public User, 
         I want to Search for Information, 
         so that I can obtain publicly available information concerning properties, County services, processes and other general information.
     */
+
+
+    try {
+        const { stdout, stderr } = await exec('python3 lang-py/us-parser.py "' + story_single + '"');
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+
+        let parse_result = JSON.parse(stdout);
+
+        let storyParsed = {
+            full_text: story_single,
+            errorStatus: {
+                status: true,
+                errors: []
+            },
+            is_parsed: true,
+            ...parse_result[0]
+        };
+
+        if (!parse_result.actor || !parse_result.action) {
+            storyParsed.is_parsed = false;
+        }
+
+        return storyParsed;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+        
+    }
+    
+
+    /*
 
     try {
         var first_comma = story_single.indexOf(',');
@@ -112,9 +148,42 @@ function parse(story_single) {
             }
         }
     };
+    */
 }
 
-function parseAllRaw(story_text) {
+async function parseAll(stories){
+    try {
+        const { stdout, stderr } = await exec('python3 lang-py/us-parser.py ' + stories.map(story => ' "' + story + '" '));
+
+        let parse_results = JSON.parse(stdout);
+
+        let stories_parsed = [];
+        for(let i=0; i < parse_results.length; i++){
+            let storyParsed = {
+                full_text: stories[i],
+                errorStatus: {
+                    status: true,
+                    errors: []
+                },
+                is_parsed: true,
+                id_user: i+1,
+                ...parse_results[i]
+            };
+            if (!storyParsed.actor || !storyParsed.action) {
+                storyParsed.is_parsed = false;
+            }
+            stories_parsed.push(storyParsed)
+        }
+
+        return stories_parsed;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+
+    }
+}
+
+async function parseAllRaw(story_text) {
     if (util.typeOfUtil(story_text) !== 'string') {
         return false;
     }
@@ -132,12 +201,7 @@ function parseAllRaw(story_text) {
         stories.push(story_text);
     }
 
-    for (var i = 0; i < stories.length; i++) {
-        var story = stories[i];
-        var story_parsed = parse(story);
-        story_parsed.id_user = i + 1;
-        storiesParsed.push(story_parsed);
-    }
+    storiesParsed = await parseAll(stories);
 
     return storiesParsed;
 }
