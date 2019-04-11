@@ -9,12 +9,7 @@ const storyList = props => {
             <StoryItem 
                 key={story._id}
                 storyId={story._id}
-                fullText={story.full_text}
-                actor={story.actor}
-                action={story.action}
-                benefit={story.benefit}
-                isParsed={story.is_parsed}
-                idUser={story.id_user}
+                {...story}
             />
         );
     });

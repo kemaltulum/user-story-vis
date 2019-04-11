@@ -16,6 +16,10 @@ function parse(story_single) {
         var first_comma = story_single.indexOf(',');
         var second_comma = util.findChar(story_single, ',', 2);
 
+        if(!second_comma){
+            second_comma = story_single.length;
+        }
+
         var storyParsed = {
             errorStatus: {
                 status: true,
@@ -52,21 +56,23 @@ function parse(story_single) {
             });
         }
 
-        // Parse reason
         var reason = false;
-        try {
-            reason = story_single.substr(second_comma + 9);
-            if (reason.endsWith('.')) {
-                reason = reason.substr(0, reason.length - 1);
+        if (story_single.includes("so that")) {
+            // Parse reason
+            try {
+                reason = story_single.substr(second_comma + 9);
+                if (reason.endsWith('.')) {
+                    reason = reason.substr(0, reason.length - 1);
+                }
+            } catch (error) {
+                console.log("While parsing reason on story: ", story_single, error.message);
+                isParsed = false;
+                storyParsed.errorStatus.errors.push({
+                    error_type: 'Template Error',
+                    error_place: 'benefit',
+                    message: error.message
+                });
             }
-        } catch (error) {
-            console.log("While parsing reason on story: ", story_single, error.message);
-            isParsed = false;
-            storyParsed.errorStatus.errors.push({
-                error_type: 'Template Error',
-                error_place: 'benefit',
-                message: error.message
-            });
         }
 
         if (actor && util.typeOfUtil(actor) === 'string' && actor.length > 0) {
@@ -81,7 +87,7 @@ function parse(story_single) {
             storyParsed.benefit = reason;
         }
 
-        if (storyParsed.action && storyParsed.actor && storyParsed.benefit) {
+        if (storyParsed.action && storyParsed.actor) {
             storyParsed.errorStatus.status = true;
         } else {
             storyParsed.errorStatus.status = false;
