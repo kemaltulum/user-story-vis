@@ -12,11 +12,6 @@ import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 
 class App extends Component {
-  state = {
-    token: null,
-    userId: null
-  };
-
   constructor(props) {
     super(props);
     /*
@@ -63,18 +58,6 @@ class App extends Component {
 
 
   }
-
-  login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
-    localStorage.setItem('token', token);
-    localStorage.setItem('userId', userId);
-  };
-
-  logout = () => {
-    this.setState({ token: null, userId: null });
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-  };
 
   render() {
     return (
