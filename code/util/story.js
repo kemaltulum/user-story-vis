@@ -19,12 +19,8 @@ async function parse(story_single){
 
     try {
         const { stdout, stderr } = await exec('python3 lang-py/us-parser.py "' + story_single + '"');
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
 
         let parse_result = JSON.parse(stdout);
-
-        console.log("Parse:", parse_result);
 
         let storyParsed = {
             full_text: story_single,

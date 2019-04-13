@@ -20,21 +20,18 @@ var StorySchema = new Schema({
 
     actor: {
         type: String,
-        lowercase: true,
         trim: true,
         required: false
     },
 
     action: {
         type: String,
-        lowercase: true,
         trim: true,
         required: false
     },
 
     benefit: {
         type: String,
-        lowercase: true,
         trim: true,
         required: false
     },
