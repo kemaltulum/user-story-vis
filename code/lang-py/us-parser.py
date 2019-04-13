@@ -1,9 +1,6 @@
 import sys, json, re
 import nltk
 
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-
 def tokenize_tag_words(text):
     tokens = nltk.word_tokenize(text)
     tags = nltk.pos_tag(tokens)
@@ -35,22 +32,22 @@ for story in user_stories:
     if parsed_story == {}:
         continue
 
-    parsed_story["token"] = {}
+    parsed_story["tokens"] = {}
 
     element = "actor"
 
     if parsed_story[element]:
-        parsed_story["token"][element] = tokenize_tag_words(parsed_story[element])
+        parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
     
     element = "action"
 
     if parsed_story[element]:
-        parsed_story["token"][element] = tokenize_tag_words(parsed_story[element])
+        parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
     
     element = "benefit"
 
     if parsed_story[element]:
-        parsed_story["token"][element] = tokenize_tag_words(parsed_story[element])
+        parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
     
     parsed_stories.append(parsed_story)
 

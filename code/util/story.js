@@ -24,6 +24,8 @@ async function parse(story_single){
 
         let parse_result = JSON.parse(stdout);
 
+        console.log("Parse:", parse_result);
+
         let storyParsed = {
             full_text: story_single,
             errorStatus: {
@@ -34,7 +36,7 @@ async function parse(story_single){
             ...parse_result[0]
         };
 
-        if (!parse_result.actor || !parse_result.action) {
+        if (!storyParsed.actor || !storyParsed.action) {
             storyParsed.is_parsed = false;
         }
 

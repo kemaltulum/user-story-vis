@@ -26,6 +26,7 @@ type Story {
   action: String
   benefit: String
   is_parsed: Boolean
+  tokens: TagData
   error_status: ErrorsStory
 }
 
@@ -48,6 +49,12 @@ type AuthData {
 
 type TokenData {
   expired: Boolean!
+}
+
+type TagData {
+  action: [String!]
+  actor: [String!]
+  benefit: [String!]
 }
 
 input StoryInput {

@@ -44,6 +44,12 @@ var StorySchema = new Schema({
         required: false
     },
 
+    tokens: {
+        action: [[String]],
+        actor: [[String]],
+        benefit: [[String]],
+    },
+
     error_status: {
         status: {
             type: Boolean,
