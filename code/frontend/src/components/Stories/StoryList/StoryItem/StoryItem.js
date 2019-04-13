@@ -12,7 +12,9 @@ const storyItem = props => (
                 <div className="stories__full-text">
                     As a <span className="actor">{props.actor}</span>,
                 I want to <span className="action">{props.action}</span>{props.action && props.action.endsWith(',') ? '' : ','}
-                {props.benefit && <span className="benefit"> so that {props.benefit.charAt(0).toUpperCase() + props.benefit.slice(1)}</span>}
+                {props.benefit && <Fragment> so that&nbsp;
+                     <span className="benefit">{props.benefit}</span>
+                </Fragment>   }
                 </div>
             </Fragment>
         }

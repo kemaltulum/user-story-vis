@@ -13,6 +13,11 @@ function getStories(projectId, token){
             benefit
             is_parsed
             id_user
+            tokens {
+                action
+                actor
+                benefit
+                }
             }
         }
     `;
@@ -77,6 +82,11 @@ function addStorySingle(projectId, fullText, idUser, token) {
             benefit
             is_parsed
             id_user
+            tokens {
+                action
+                actor
+                benefit
+                }
             }
         }
     `;
@@ -107,6 +117,11 @@ function addStoryBulkRaw(projectId, rawText, token) {
             benefit
             is_parsed
             id_user
+            tokens {
+                action
+                actor
+                benefit
+                }
             }
         }
     `;
