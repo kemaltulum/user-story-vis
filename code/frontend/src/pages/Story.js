@@ -54,6 +54,7 @@ class StoryPage extends Component {
             const rawText = this.rawTextElRef.current.value;
             this.props.addStoryBulkRaw(projectId, rawText, token);
         }
+        this.setState({ modalOpened: false });
     }
 
     render() {

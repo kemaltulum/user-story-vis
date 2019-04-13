@@ -45,6 +45,7 @@ class ProjectsPage extends Component {
         }
 
         this.props.createProject(name, description, this.props.token);
+        this.setState({ creating: false });
     }
 
     modalCancelHandler = () => {
