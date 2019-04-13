@@ -18,7 +18,7 @@ for story in user_stories:
     if not story.endswith('.'):
         story += '.'
     actor = re.search(r'[A|a]s\s*a\s*([^,]*)?,', story)
-    action = re.search(r'[I|i]\s*?(want to|can|would like to)\s*([^,\.]*)(,|\.)', story)
+    action = re.search(r'[I|i]\s*?(want to|can|would like to)\s*([^,\.]*?)\s*(,|\.|so that)', story)
     benefit = re.search(r'so that\s*(.*)\.$', story)
 
     parsed_story = {}
@@ -36,17 +36,17 @@ for story in user_stories:
 
     element = "actor"
 
-    if parsed_story[element]:
+    if element in parsed_story:
         parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
     
     element = "action"
 
-    if parsed_story[element]:
+    if element in parsed_story:
         parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
     
     element = "benefit"
 
-    if parsed_story[element]:
+    if element in parsed_story:
         parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
     
     parsed_stories.append(parsed_story)
