@@ -52,9 +52,9 @@ type TokenData {
 }
 
 type TagData {
-  action: [String!]
-  actor: [String!]
-  benefit: [String!]
+  action: [[String!]!]
+  actor: [[String!]!]
+  benefit: [[String!]!]
 }
 
 input StoryInput {

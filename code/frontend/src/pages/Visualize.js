@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import Tree from 'react-d3-tree';
 
 import './Visualize.css';
 
 import { connect } from 'react-redux';
 
 import Spinner from '../components/Spinner/Spinner';
+import CollapsibleTree from '../components/d3/CollapsibleTree/CollapsibleTree';
+
 import { storyActions } from '../actions/story.actions';
 
 const myTreeData = [
@@ -22,6 +23,16 @@ const myTreeData = [
     }
 ];
 
+class NodeLabel extends React.PureComponent {
+    render() {
+        const { className, nodeData } = this.props
+        return (
+            <div className={className}>
+                <h2>{nodeData.name}</h2>
+            </div>
+        )
+    }
+}
 
 
 class VisualizePage extends Component {
@@ -43,6 +54,7 @@ class VisualizePage extends Component {
         });
     }
 
+    
     render() {
         return (
             <Fragment >
@@ -50,10 +62,8 @@ class VisualizePage extends Component {
                     <Spinner />
                 ) : (
                         <div ref={this.treeContainer} className="visualize-container">
-
-                            <Tree data={this.props.storiesTree}
-                                translate={this.state.translate}
-                                orientation={'vertical'} />
+                            
+                            <CollapsibleTree data={this.props.storiesTree} width="1000" height="1200"/>
 
                         </div>
                     )}
@@ -61,6 +71,19 @@ class VisualizePage extends Component {
             </Fragment>);
     }
 }
+
+/*
+<Tree data={this.props.storiesTree}
+                                translate={this.state.translate}
+                                allowForeignObjects
+                                orientation={'vertical'}
+                                nodeLabelComponent={{
+                                    render: <NodeLabel className='myLabelComponentInSvg' />,
+                                    foreignObjectWrapper: {
+                                        y: 24
+                                    }
+                                }}/>
+*/
 
 function mapStateToProps(state) {
     const { token } = state.auth;

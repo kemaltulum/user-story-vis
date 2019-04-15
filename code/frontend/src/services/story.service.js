@@ -34,7 +34,46 @@ function getStories(projectId, token){
         });
 }
 
-function createStoryTrees(stories) {
+/**
+ * 
+ * @param {*} story 
+ * @param {*} item  The part of the story needed like action, action-verb
+ */
+function getItem(story, item){
+    switch (item) {
+        case 'actor':
+            return story.actor;
+        case 'action':
+            return story.action;
+        case 'benefit':
+            return story.benefit;
+        case 'action-verb':
+            if(story.tokens.action && story.tokens.action.length > 0){
+                let tokens = story.tokens.action;
+
+                // Try to find a token like V, VP, VPN
+                for(let i=0; i<tokens.length; i++){
+                    let token = tokens[i];
+                    if(token[1].startsWith('V')){
+                        return token[0];
+                    }
+                }
+
+                // İf cannot find, try to find N
+                for (let i = 0; i < tokens.length; i++) {
+                    let token = tokens[i];
+                    if (token[1].startsWith('N')) {
+                        return token[0];
+                    }
+                }
+            }
+            return null;
+        default:
+            break;
+    }
+}
+
+function createStoryTreesOld(stories) {
     let treeData = {
         name: 'Actor',
         children: []
@@ -60,6 +99,37 @@ function createStoryTrees(stories) {
         }
     }
     return [treeData];
+}
+
+function createStoryTrees(stories) {
+    let treeData = {
+        name: 'Actor',
+        children: []
+    };
+
+    let actors = [];
+
+    for (let i = 0; i < stories.length; i++) {
+        let story = stories[i];
+        let actor = story.actor;
+
+        if (!actors.includes(actor)) {
+            actors.push(actor);
+            treeData.children.push({ name: actor, _collapsed: true, children: [{ name: getItem(story, 'action-verb') }] });
+        } else if (story.action) {
+            for (let j = 0; j < treeData.children.length; j++) {
+                let child = treeData.children[j];
+
+                if (child.name === actor) {
+                    let item = getItem(story, 'action-verb');
+                    if(!child.children.some(c => c.name === item)){
+                        child.children.push({ name: item });
+                    }
+                }
+            }
+        }
+    }
+    return treeData;
 }
 
 function getStoriesTree(projectId, token) {

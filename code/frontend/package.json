@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "d3": "^5.9.2",
+    "loadash": "^1.0.0",
     "react": "^16.8.5",
     "react-d3-tree": "^1.12.3",
     "react-dom": "^16.8.5",
+    "react-motion": "^0.5.2",
     "react-redux": "^6.0.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",

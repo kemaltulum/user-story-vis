@@ -17,13 +17,13 @@ for story in user_stories:
     story = story.strip()
     if not story.endswith('.'):
         story += '.'
-    actor = re.search(r'[A|a]s\s*a\s*([^,]*)?,', story)
-    action = re.search(r'[I|i]\s*?(want to|can|would like to)\s*([^,\.]*?)\s*(,|\.|so that)', story)
+    actor = re.search(r'(A|a)s\s*?an?\s*([^,]*)?,', story)
+    action = re.search(r'[I|i]\s+?(want to|can|would like to)\s*([^,\.]*?)\s*(,|\.|so that)', story)
     benefit = re.search(r'so that\s*(.*)\.$', story)
 
     parsed_story = {}
     if actor:
-        parsed_story["actor"] = actor.group(1)
+        parsed_story["actor"] = actor.group(2)
     if action:
         parsed_story["action"] = action.group(2)
     if benefit:
