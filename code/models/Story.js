@@ -42,9 +42,9 @@ var StorySchema = new Schema({
     },
 
     tokens: {
-        action: [[String]],
-        actor: [[String]],
-        benefit: [[String]],
+        action: Schema.Types.Mixed,
+        actor: Schema.Types.Mixed,
+        benefit: Schema.Types.Mixed
     },
 
     error_status: {

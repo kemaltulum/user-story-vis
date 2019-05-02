@@ -26,6 +26,7 @@ module.exports = {
             const fullText = args.storyInput.full_text;
             const storyParsed = await parseSingle(fullText);
 
+            console.log(storyParsed);
 
             const story = new Story({
                 ...storyParsed,

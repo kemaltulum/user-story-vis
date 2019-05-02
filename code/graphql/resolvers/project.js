@@ -9,7 +9,6 @@ module.exports = {
     projects: async () => {
         try {
             const projects = await Project.find();
-            console.log(projects);
             return projects.map(project => {
                 return transformProject(project);
             });

@@ -51,10 +51,26 @@ type TokenData {
   expired: Boolean!
 }
 
+type TagDetailSec {
+  verb: String
+  object: String
+}
+
+type TagDetail {
+  main_verb: String
+  main_object: TagObject
+  sec_verbs: [TagDetailSec]
+}
+
+type TagObject {
+  chunk: String
+  text: String
+}
+
 type TagData {
-  action: [[String!]!]
-  actor: [[String!]!]
-  benefit: [[String!]!]
+  action: TagDetail
+  actor: TagDetail
+  benefit: TagDetail
 }
 
 input StoryInput {
