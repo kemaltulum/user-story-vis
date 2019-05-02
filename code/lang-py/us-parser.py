@@ -6,6 +6,10 @@ def tokenize_tag_words(text):
     tags = nltk.pos_tag(tokens)
     return list(map(lambda tag: [tag[0], tag[1]], tags))
 
+def lower_first_word(sentence):
+    words = sentence.split(' ')
+    words[0] = words[0].lower()
+    return " ".join(words)
 
 user_stories = sys.argv[1: len(sys.argv)]
 
@@ -42,7 +46,8 @@ for story in user_stories:
     element = "action"
 
     if element in parsed_story:
-        parsed_story["tokens"][element] = tokenize_tag_words(parsed_story[element])
+        action = "I want to " + lower_first_word(parsed_story[element])
+        parsed_story["tokens"][element] = tokenize_tag_words(action)[3:]
     
     element = "benefit"
 
