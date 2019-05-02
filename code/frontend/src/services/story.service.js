@@ -14,9 +14,17 @@ function getStories(projectId, token){
             is_parsed
             id_user
             tokens {
-                action
-                actor
-                benefit
+                    action {
+                        main_verb
+                        main_object {
+                            chunk
+                            text
+                        }
+                        sec_verbs {
+                            verb
+                            object
+                        }
+                    }
                 }
             }
         }
@@ -48,26 +56,14 @@ function getItem(story, item){
         case 'benefit':
             return story.benefit;
         case 'action-verb':
-            if(story.tokens.action && story.tokens.action.length > 0){
-                let tokens = story.tokens.action;
-
-                // Try to find a token like V, VP, VPN
-                for(let i=0; i<tokens.length; i++){
-                    let token = tokens[i];
-                    if(token[1].startsWith('V')){
-                        return token[0];
-                    }
-                }
-
-                // İf cannot find, try to find N
-                for (let i = 0; i < tokens.length; i++) {
-                    let token = tokens[i];
-                    if (token[1].startsWith('N')) {
-                        return token[0];
-                    }
-                }
+            if(story.tokens.action && story.tokens.action.main_verb){
+                return story.tokens.action.main_verb;
             }
             return null;
+        case 'action-object':
+            if (story.tokens.action && story.tokens.action.main_object) {
+                return story.tokens.action.main_object.text;
+            }
         default:
             break;
     }
@@ -115,15 +111,16 @@ function createStoryTrees(stories) {
 
         if (!actors.includes(actor)) {
             actors.push(actor);
-            treeData.children.push({ name: actor, _collapsed: true, children: [{ name: getItem(story, 'action-verb') }] });
+            treeData.children.push({ name: actor, _collapsed: true, children: [{ name: getItem(story, 'action-verb'), children: [{name: getItem(story, 'action-object')}]}  ] });
         } else if (story.action) {
             for (let j = 0; j < treeData.children.length; j++) {
                 let child = treeData.children[j];
 
                 if (child.name === actor) {
                     let item = getItem(story, 'action-verb');
+                    let object = getItem(story, 'action-object');
                     if(!child.children.some(c => c.name === item)){
-                        child.children.push({ name: item });
+                        child.children.push({ name: item, children: [{name: object}]});
                     }
                 }
             }
@@ -153,9 +150,17 @@ function addStorySingle(projectId, fullText, idUser, token) {
             is_parsed
             id_user
             tokens {
-                action
-                actor
-                benefit
+                    action {
+                        main_verb
+                        main_object {
+                            chunk
+                            text
+                        }
+                        sec_verbs {
+                            verb
+                            object
+                        }
+                    }
                 }
             }
         }
@@ -188,9 +193,17 @@ function addStoryBulkRaw(projectId, rawText, token) {
             is_parsed
             id_user
             tokens {
-                action
-                actor
-                benefit
+                    action {
+                        main_verb
+                        main_object {
+                            chunk
+                            text
+                        }
+                        sec_verbs {
+                            verb
+                            object
+                        }
+                    }
                 }
             }
         }
