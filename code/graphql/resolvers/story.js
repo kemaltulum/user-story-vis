@@ -1,6 +1,9 @@
 const Project = require('../../models/Project');
 const Story = require('../../models/Story');
 
+const storyTree = require('../../util/storyTree');
+const Bull = require('bull');
+
 
 const { transformStory } = require('./merge');
 
@@ -35,6 +38,14 @@ module.exports = {
             });
 
             const result = await story.save();
+
+            const storyTreeQueue = new Bull('story-tree-queue');
+
+            const job = await storyTreeQueue.add({
+                projectId: args.projectId,
+                stories: [result]
+            });
+
             const createdStory = transformStory(result);
 
             return createdStory;
@@ -49,6 +60,15 @@ module.exports = {
 
             const stories = await Story.insertMany(storiesParsed.map(story => {return {...story, project_id: args.projectId}}));
 
+            //const storyTreeQueue = new Bull('story-tree-queue');
+            
+            const data = {
+                projectId: args.projectId,
+                stories: stories
+            };
+            //const job = await storyTreeQueue.add(data);
+
+            await storyTree.createStoryTree(data);
             return stories.map(story => {
                 return transformStory(story)
             });
