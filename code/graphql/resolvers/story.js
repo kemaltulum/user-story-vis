@@ -33,18 +33,17 @@ module.exports = {
 
             const story = new Story({
                 ...storyParsed,
-                project_id: args.storyInput.project_id,
-                id_user: args.storyInput.id_user
+                project_id: args.storyInput.project_id
             });
 
             const result = await story.save();
 
-            const storyTreeQueue = new Bull('story-tree-queue');
-
+            //const storyTreeQueue = new Bull('story-tree-queue');
+            /*
             const job = await storyTreeQueue.add({
                 projectId: args.projectId,
                 stories: [result]
-            });
+            }); */
 
             const createdStory = transformStory(result);
 

@@ -168,7 +168,6 @@ async function parseAll(stories){
                     errors: []
                 },
                 is_parsed: true,
-                id_user: i+1,
                 ...parse_results[i]
             };
             if (!storyParsed.actor || !storyParsed.action) {

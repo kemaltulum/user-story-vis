@@ -136,12 +136,12 @@ function getStoriesTree(projectId, token) {
         });
 }
 
-function addStorySingle(projectId, fullText, idUser, token) {
+function addStorySingle(projectId, fullText, token) {
 
     const query =
     `
-        mutation addStory($full_text: String!, $id_user: String!, $project_id: String!) {
-            addStory(storyInput : {full_text: $full_text, id_user: $id_user, project_id: $project_id}) {
+        mutation addStory($full_text: String!, $project_id: String!) {
+            addStory(storyInput : {full_text: $full_text, project_id: $project_id}) {
             _id
             full_text
             actor
@@ -168,7 +168,6 @@ function addStorySingle(projectId, fullText, idUser, token) {
 
     const variables = {
         full_text: fullText,
-        id_user: idUser,
         project_id: projectId
     }
 

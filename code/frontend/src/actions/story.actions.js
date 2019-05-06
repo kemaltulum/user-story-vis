@@ -48,13 +48,13 @@ function getStoriesTree(projectId, token) {
     }
 }
 
-function addStorySingle(projectId, fullText, idUser, token) {
+function addStorySingle(projectId, fullText, token) {
     return dispatch => {
         dispatch({
             type: 'STORIES_REQUEST',
             payload: {}
         });
-        storyService.addStorySingle(projectId, fullText, idUser, token)
+        storyService.addStorySingle(projectId, fullText, token)
             .then(
                 newStory => {
                     dispatch({

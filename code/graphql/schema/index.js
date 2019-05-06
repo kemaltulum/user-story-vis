@@ -74,7 +74,6 @@ type TagData {
 }
 
 input StoryInput {
-  id_user: String!
   project_id: String!
   full_text: String!
 }

@@ -27,7 +27,6 @@ class CollapsibleTree extends Component {
         if(data.children && data.children.length > 10) {
            height = data.children.length * 90;
         }
-        console.log(data);
 
         const nodeWidth = 110;
         const nodeHeight = 24;
@@ -37,21 +36,20 @@ class CollapsibleTree extends Component {
 
         const treeLayout = d3.tree().size([height - 2 * margin.y, width - 2*margin.x]);
 
+        console.log(this.props);
+
         // Assigns parent, children, height, depth
         let root = d3.hierarchy(data, function (d) { return d.children; });
         root.x0 = height / 2;
         root.y0 = 0;
 
+        console.log({root})
         const nodeList = treeLayout(root);
+        console.log({nodeList});
         /*var diagonal = d3.linkHorizontal()
             .x(function (d) { return d.y + nodeWidth; })
             .y(function (d) { return d.x + nodeHeight/2; }); */
 
-        console.log(nodeList);
-
-        let arr = [];
-
-        this.bfs(arr, nodeList);
 
         const linksList = nodeList.links();
 
@@ -60,7 +58,7 @@ class CollapsibleTree extends Component {
                 <svg height={height} width={width} transform={`translate(${margin.y}, ${margin.x})`}>
                     <g>
                         <LinksGroup linksList={linksList} />
-                        <NodesGroup nodeList={nodeList} tree={data} />
+                        <NodesGroup nodeList={nodeList} />
                     </g>
                 </svg>
             </div>

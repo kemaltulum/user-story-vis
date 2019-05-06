@@ -23,6 +23,13 @@ class StoryPage extends Component {
         this.rawTextElRef = React.createRef();
     }
 
+    sortStories(stories){
+        stories.sort((a,b) => {
+            return parseInt(b.id_user) > parseInt(a.id_user);
+        });
+        return stories;
+    }
+
     componentDidMount(){
         this.props.getStories(this.props.match.params.project_id, this.props.token);
     }
@@ -48,8 +55,7 @@ class StoryPage extends Component {
 
         if(this.state.modalType === 'single'){
             const fullText = this.storyElRef.current.value;
-            const idUser = this.idUserElRef.current.value;
-            this.props.addStorySingle(projectId, fullText, idUser, token);
+            this.props.addStorySingle(projectId, fullText, token);
         } else if(this.state.modalType === 'raw'){
             const rawText = this.rawTextElRef.current.value;
             this.props.addStoryBulkRaw(projectId, rawText, token);
@@ -74,10 +80,6 @@ class StoryPage extends Component {
                                 <div className="form-control">
                                     <label htmlFor="story">User Story</label>
                                     <input type="text" id="story" ref={this.storyElRef} />
-                                </div>
-                                <div className="form-control">
-                                    <label htmlFor="id_user">Story ID</label>
-                                    <input type="text" id="id_user" ref={this.idUserElRef} />
                                 </div>
                             </form>
                         </Modal>
@@ -118,7 +120,7 @@ class StoryPage extends Component {
                     <Spinner />
                 ) : (
                         <StoryList
-                            stories={this.props.stories}
+                            stories={this.sortStories(this.props.stories)}
                         />
                     )}
                 

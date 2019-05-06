@@ -62,7 +62,25 @@ var StorySchema = new Schema({
     }
 },{ timestamps: true });
 
-StorySchema.index({id_user: 1}, {project_id: 1}, {unique: true});
-var Story = mongoose.model('Story', StorySchema);
+StorySchema.index({id_user: 1, project_id: 1}, {unique: true});
+
+// Use pre middleware
+
+StorySchema.pre('validate', function(next){
+    console.log("PRESAVE", this);
+    // Only increment when the document is new
+    if (this.isNew) {
+        Story.count({ project_id: this.project_id }).then(res => {
+            this.id_user = res + 1; // Increment count
+            next();
+        });
+    } else {
+        next();
+    }
+});
+
+const Story = mongoose.model('Story', StorySchema);
+
+
 
 module.exports = Story;
