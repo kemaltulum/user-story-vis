@@ -65,7 +65,7 @@ def tokenize_tag_words(text):
             sec_verbs = []
             for i in range(1, num_verbs):
                 sec_verbs.append(
-                    {"verb": verbs[i], "object": get_object_with_chunk(verbs[i], doc)})
+                    {"verb": verbs[i].text, "object": get_object_with_chunk(verbs[i], doc)})
             res["sec-verbs"] = sec_verbs
     except Exception as error:
         #print(error.args)
