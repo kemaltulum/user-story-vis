@@ -5,7 +5,7 @@ var Story = require('../models/Story');
 
 const util_ = require('util');
 const exec = util_.promisify(require('child_process').exec);
-
+const execFile = util_.promisify(require('child_process').execFile);
 
 
 
@@ -18,7 +18,8 @@ async function parse(story_single){
 
 
     try {
-        const { stdout, stderr } = await exec('python3 lang-py/spacy-parser.py "' + story_single + '"');
+        //const { stdout, stderr } = await exec('python3 lang-py/spacy-parser.py "' + story_single + '"');
+        const { stdout, stderr } = await execFile('python3', ['lang-py/spacy-parser.py', story_single]);
 
         let parse_result = JSON.parse(stdout);
 
@@ -151,7 +152,10 @@ async function parse(story_single){
 
 async function parseAll(stories){
     try {
-        const { stdout, stderr } = await exec('python3 lang-py/spacy-parser.py ' + stories.map(story => ' "' + story + '" '));
+        let args = ['lang-py/spacy-parser.py'];
+        args = args.concat(stories);
+        const { stdout, stderr } = await execFile('python3', args);
+        //const { stdout, stderr } = await exec('python3 lang-py/spacy-parser.py ' + stories.map(story => ' "' + story + '" '));
 
         let parse_results = JSON.parse(stdout);
 
@@ -172,6 +176,7 @@ async function parseAll(stories){
             }
             stories_parsed.push(storyParsed)
         }
+
 
         return stories_parsed;
     } catch (error) {

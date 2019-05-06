@@ -18,4 +18,10 @@ exports.findChar = (text, char, which=1) => {
     return false;
 }
 
+exports.capitalize = (string) => {
+
+    return string.charAt(0).toUpperCase() + string.slice(1);
+
+}
+
 exports.dateToString = date => new Date(date).toISOString();
