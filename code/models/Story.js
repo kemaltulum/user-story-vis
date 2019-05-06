@@ -59,6 +59,9 @@ var StorySchema = new Schema({
                 message: String
             }
         ]
+    },
+    order: {
+        type: Number
     }
 },{ timestamps: true });
 
@@ -67,11 +70,10 @@ StorySchema.index({id_user: 1, project_id: 1}, {unique: true});
 // Use pre middleware
 
 StorySchema.pre('validate', function(next){
-    console.log("PRESAVE", this);
     // Only increment when the document is new
     if (this.isNew) {
         Story.count({ project_id: this.project_id }).then(res => {
-            this.id_user = res + 1; // Increment count
+            this.id_user = res + this.order; // Increment count
             next();
         });
     } else {

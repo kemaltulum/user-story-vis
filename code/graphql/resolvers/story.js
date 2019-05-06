@@ -33,7 +33,8 @@ module.exports = {
 
             const story = new Story({
                 ...storyParsed,
-                project_id: args.storyInput.project_id
+                project_id: args.storyInput.project_id,
+                order: 1
             });
 
             const result = await story.save();
@@ -57,7 +58,12 @@ module.exports = {
             const rawText = args.rawText;
             const storiesParsed = await parseAllRaw(rawText);
 
-            const stories = await Story.insertMany(storiesParsed.map(story => {return {...story, project_id: args.projectId}}));
+            storiesParsedMap = [];
+            for(let i=0; i<storiesParsed.length; i++){
+                let story = storiesParsed[i];
+                storiesParsedMap.push({ ...story, project_id: args.projectId, order: i + 1 });
+            }
+            const stories = await Story.insertMany(storiesParsedMap);
 
             //const storyTreeQueue = new Bull('story-tree-queue');
             
