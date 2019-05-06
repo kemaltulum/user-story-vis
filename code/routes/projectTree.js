@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var Project = require('../models/Project');
+var ProjectTree = require('../models/Project');
 
 /* GET all the projects. */
 router.get('/', function (req, res, next) {
-
-
     var promise = Project.find({});
 
     promise.then(function (data) {
