@@ -24,4 +24,8 @@ exports.capitalize = (string) => {
 
 }
 
+exports.arrContain = (arr, item) => {
+    return arr.filter(el => el === item).length > 0;
+}
+
 exports.dateToString = date => new Date(date).toISOString();

@@ -22,6 +22,8 @@ var TreeNodeSchema = new Schema({
         ref: 'Story',
     }],
 
+    isRoot: Boolean,
+
     children: [{
         type: Schema.Types.ObjectId,
         ref: 'TreeNode',
