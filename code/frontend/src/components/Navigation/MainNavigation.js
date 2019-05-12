@@ -1,16 +1,40 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { authActions } from '../../actions/auth.actions';
 import { projectActions } from '../../actions/project.actions';
 
+import { withRouter } from 'react-router-dom';
+
 import './MainNavigation.css';
 
 // #8948FC
 
 class MainNavigation extends Component {
-  render(){
+  constructor(props) {
+    super(props);
+    this.state = {
+      current: null,
+      projectID: this.props.location.pathname.substr(1, this.props.location.pathname.lastIndexOf("/") - 1)
+    }
+  }
+  componentDidMount() {
+    this.props.getProjects(this.props.token);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      this.props.projects.forEach(element => {
+        if (element._id === this.state.projectID) {
+          this.setState({
+            current: element
+          })
+        }
+      });
+    }
+
+  }
+  render() {
     return (
       <header className="main-navigation">
         <div className="project-links">
@@ -38,15 +62,47 @@ class MainNavigation extends Component {
         </div>
 
         <nav className="main-navigation__items">
-        <div className="main-navigation__logo">
-          <h1>AgileStory</h1>
-        </div>
+          <div className="main-navigation__logo">
+            <h1>AgileStory</h1>
+          </div>
           <div>
+            <div className="main-navigation__title">
+              <h3>
+                Project
+              </h3>
+            </div>
+            <div className="main-navigation__current-project">
+              <h2>
+                {this.state.current && this.state.current.name}
+              </h2>
+            </div>
+            <div className="main-navigation__title">
+              <h3>
+                Stories
+              </h3>
+            </div>
             <ul>
-              {this.props.token && (
+              {this.state.projectID && (
                 <React.Fragment>
                   <li>
-                    <NavLink to="/projects">Projects</NavLink>
+                    <NavLink to={"/" + this.state.projectID + "/stories"}>Card View</NavLink>
+                  </li>
+                </React.Fragment>
+              )}
+            </ul>
+            <div className="main-navigation__title">
+              <h3>
+                Visualize
+              </h3>
+            </div>
+            <ul>
+              {this.state.projectID && (
+                <React.Fragment>
+                  <li>
+                    <NavLink to={"/" + this.state.projectID + "/visualize?type=story-tree"}>Story Tree</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/" + this.state.projectID + "/visualize?type=actor-tree"}>Actor Tree</NavLink>
                   </li>
                 </React.Fragment>
               )}
@@ -82,4 +138,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainNavigation);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainNavigation));

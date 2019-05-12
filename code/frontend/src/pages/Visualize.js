@@ -46,10 +46,15 @@ class VisualizePage extends Component {
     }
 
     componentDidMount() {
-        //this.props.getStoriesTree(this.props.match.params.project_id, 'story-tree', this.props.token);
-        this.props.getStoriesTree(this.props.match.params.project_id, 'actor-tree', this.props.token);
+        
+        const params = new URLSearchParams(this.props.location.search);
+        const type = params.get('type'); // bar
 
-        console.log(this.props.storiesTree);
+        if(type==="actor-tree"){
+            this.props.getStoriesTree(this.props.match.params.project_id, 'actor-tree', this.props.token);
+        } else {
+            this.props.getStoriesTree(this.props.match.params.project_id, 'story-tree', this.props.token);
+        }
 
 
         const dimensions = this.treeContainer.current.getBoundingClientRect();
@@ -60,6 +65,26 @@ class VisualizePage extends Component {
             }
         });
     }
+
+    componentDidUpdate(prevProps) {
+        // will be true
+        const locationChanged = this.props.location !== prevProps.location;
+        const searchChanged = this.props.location.search !== prevProps.location.search;
+
+        if(locationChanged) {
+            const params = new URLSearchParams(this.props.location.search);
+            const type = params.get('type'); // bar
+
+            if (type === "actor-tree") {
+                this.props.getStoriesTree(this.props.match.params.project_id, 'actor-tree', this.props.token);
+            } else {
+                this.props.getStoriesTree(this.props.match.params.project_id, 'story-tree', this.props.token);
+            }
+        }
+        // INCORRECT, will *always* be false because history is mutable.
+        //const locationChanged = this.props.history.location !== prevProps.history.location;
+    }
+
 
     
     render() {
