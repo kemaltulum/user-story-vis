@@ -63,7 +63,6 @@ export default class NodesGroup extends Component {
 
 
     render() {
-        console.log("render");
         const { nodeList } = this.state;
         const nodeArr = []
         this.bfs(nodeArr, nodeList);
@@ -265,9 +264,6 @@ export default class NodesGroup extends Component {
         
         let linkSources = [];
         let nodeListUpdated = this.findNodeAndUpdate(nodeList, d._id, linkSources);
-
-        console.log(this.state.linksList);
-        console.log(linkSources);
 
         const { linksList } = this.state;
 
