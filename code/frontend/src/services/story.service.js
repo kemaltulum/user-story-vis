@@ -129,12 +129,80 @@ function createStoryTrees(stories) {
     return treeData;
 }
 
-function getStoriesTree(projectId, token) {
-    return getStories(projectId, token)
-        .then(resData => {
-            return createStoryTrees(resData);
+function getStoriesTree(projectId, type, token) {
+    if(type === "story-tree") {
+        return getStories(projectId, token)
+            .then(resData => {
+                return createStoryTrees(resData);
+            });
+    } else if(type === "actor-tree"){
+        return getStoryTree(projectId, type, token)
+            .then(resData => {
+                return createTreeStructureFronNodes(resData);
+            });
+    }
+}
+
+function getStoryTree(projectId, nodeType, token) {
+    //getStoryTree(projectId: String, nodeType: String)
+    const query =
+        `
+        query storyTree($project_id: String!, $nodeType: String! ) {
+            storyTree(projectId: $project_id, nodeType: $nodeType) {
+            _id
+            nodeType
+            name
+            project_id
+            story_ids
+            isRoot
+            children
+        }}
+    `;
+
+    const variables = {
+        project_id: projectId,
+        nodeType: nodeType
+    };
+
+    return graph(query, variables, token)
+        .then(handleResponse)
+        .then(responseData => {
+            const treeNodes = responseData.data.storyTree;
+            return treeNodes;
         });
 }
+
+function createTreeStructureFronNodes(treeNodes){
+    let treeRoot;
+    for(let i=0; i<treeNodes.length; i++){
+        if(treeNodes[i].isRoot){
+            treeRoot = treeNodes[i];
+            break;
+        }
+    }
+
+    treeRoot = createTreeHelper(treeRoot, treeNodes);
+
+    return treeRoot;
+
+}
+
+function createTreeHelper(root, nodes) {
+    if(!root.children || root.children.length === 0){
+        return root;
+    }
+    let children = root.children;
+    root.children = []
+    for(let i=0; i<children.length; i++){
+        let child = children[i];
+        let childRoot = nodes.filter(node => node._id === child)[0];
+        childRoot = createTreeHelper(childRoot, nodes);
+        childRoot.parentId = root._id;
+        root.children.push(childRoot);
+    }
+    return root;
+}
+
 
 function addStorySingle(projectId, fullText, token) {
 
@@ -240,6 +308,7 @@ function handleResponse(res) {
 
 export const storyService = {
     getStories,
+    getStoryTree,
     addStorySingle,
     addStoryBulkRaw,
     getStoriesTree

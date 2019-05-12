@@ -1,5 +1,7 @@
 const Project = require('../../models/Project');
 const Story = require('../../models/Story');
+const TreeNode = require('../../models/TreeNode');
+const mongoose = require('mongoose');
 
 const storyTree = require('../../util/storyTree');
 const Bull = require('bull');
@@ -77,6 +79,21 @@ module.exports = {
             return stories.map(story => {
                 return transformStory(story)
             });
+        } catch (error) {
+            throw error;
+        }
+    },
+    storyTree: async ({nodeType, projectId}) => {
+        try {
+            let treeNodes = await TreeNode.find({ project_id: projectId, nodeType: nodeType });
+
+            return treeNodes.map(treeNode => {
+                return {
+                    ...treeNode._doc,
+                    _id: treeNode.id
+                };
+            });
+
         } catch (error) {
             throw error;
         }

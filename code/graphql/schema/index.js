@@ -30,6 +30,16 @@ type Story {
   error_status: ErrorsStory
 }
 
+type TreeNode {
+  _id: ID!
+  name: String
+  nodeType: String!
+  project_id: String!
+  story_ids: [String!]!
+  isRoot: Boolean
+  children: [String!]!
+}
+
 type ErrorsStory {
   status: Boolean
   errors: [ErrorStory!]!
@@ -88,6 +98,7 @@ type RootQuery {
     login(email: String!, password: String!): AuthData!
     stories(projectId: String!): [Story!]!
     verifyToken(token: String!): TokenData!
+    storyTree(projectId: String, nodeType: String): [TreeNode!]!
 }
 
 type RootMutation {

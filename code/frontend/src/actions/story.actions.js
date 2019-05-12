@@ -24,13 +24,13 @@ function getStories(projectId, token) {
     }
 }
 
-function getStoriesTree(projectId, token) {
+function getStoriesTree(projectId, type, token) {
     return dispatch => {
         dispatch({
             type: 'STORIES_REQUEST',
             payload: {}
         });
-        storyService.getStoriesTree(projectId, token)
+        storyService.getStoriesTree(projectId, type, token)
             .then(
                 storiesTree => {
                     dispatch({
@@ -47,6 +47,7 @@ function getStoriesTree(projectId, token) {
             );
     }
 }
+
 
 function addStorySingle(projectId, fullText, token) {
     return dispatch => {
