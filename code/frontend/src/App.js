@@ -11,6 +11,7 @@ import VisualizePage from './pages/Visualize';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -63,7 +64,9 @@ class App extends Component {
     return (
       <BrowserRouter>
         <React.Fragment>
-            <MainNavigation token={this.props.token} logout={this.props.logout}/>
+          {this.props.token && 
+            <MainNavigation /> 
+          }
             <main className="main-content">
               <Switch>
                 {this.props.token && <Redirect from="/" to="/projects" exact />}
@@ -93,6 +96,7 @@ class App extends Component {
 
 function mapStateToProps(state){
   const {token, userId} = state.auth;
+  const { projects } = state.project;
   return {
     token,
     userId
