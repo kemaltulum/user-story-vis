@@ -1,9 +1,11 @@
 .visualize-container{
     position: relative;
-    width: 100%;
+    width: 1500px;
     margin: 80px 0;
+    height: 800px;
 }
 
 .myLabelComponentInSvg {
     position: relative; bottom: 30px; right: 15px;
+    font-size: 10px;
 }

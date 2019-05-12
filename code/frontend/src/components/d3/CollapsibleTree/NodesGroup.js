@@ -7,7 +7,8 @@ export default class NodesGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            oldNodesList: null
+            nodeList: props.nodeList,
+            linksList: props.linksList
         };
     }
 
@@ -48,29 +49,43 @@ export default class NodesGroup extends Component {
         }
     }
 
+    diagonal(d, w, h) {
+        let dsy = d.source.y + w;
+        let dsx = d.source.x + h / 2;
+        let dtx = d.target.x + h / 2;
+        let dty = d.target.y;
+        return "M" + dsy + "," + dsx
+            + "C" + (dsy + dty) / 2 + "," + dsx
+            + " " + (dsy + dty) / 2 + "," + dtx
+            + " " + dty + "," + dtx;
+    }
+
+
 
     render() {
-        const { nodeList } = this.props;
+        console.log("render");
+        const { nodeList } = this.state;
         const nodeArr = []
         this.bfs(nodeArr, nodeList);
         const nodesConfig = nodeArr.map(node => ({
             key: node.x + "-" + node.y,
             style: { x: spring(node.x), y: spring(node.y) },
-            data: node
+            data: node.data
         }));
 
-        console.log({nodesConfig});
         const defaultNodesConfig = nodeArr.map(node => {
             const style = node.parent ? { x: node.parent.x, y: node.parent.y } : { x: node.x, y: 0 };
             return {
                 key: node.x + "-" + node.y,
                 style: style,
-                data: node
+                data: node.data
             };
         });
 
         const nodeWidth = 110;
         const nodeHeight = 24;
+
+        
         
         const nodes = (
             <TransitionMotion
@@ -91,9 +106,9 @@ export default class NodesGroup extends Component {
                                                     <rect width={nodeWidth} height={nodeHeight} onClick={this.handleGroupClick.bind(this, config.data)}
                                                         fill="lightblue" style={{ stroke: 'black' }} >
                                                     </rect>
-                                                    <text x="5" y={nodeHeight / 2 + 3} style={{ fontSize: (this.font(config.data.data.name)) }}>
-                                                        {this.short(config.data.data.name)}
-                                                        <title>{config.data.data.name}</title>
+                                                    <text x="5" y={nodeHeight / 2 + 3} style={{ fontSize: (this.font(config.data.name)) }}>
+                                                        {this.short(config.data.name)}
+                                                        <title>{config.data.name}</title>
                                                     </text>
                                                 </g >
                                             );
@@ -107,26 +122,78 @@ export default class NodesGroup extends Component {
             </TransitionMotion>
         );
 
-        return nodes;
-    }
+        const { linksList } = this.state;
+        const linksConfig = linksList.map(link => ({
+            key: `${link.source.x}-${link.target.y}-${link.source.y}-${link.target.x}`,
+            style: {
+                sourceX: spring(link.source.x),
+                sourceY: spring(link.source.y),
+                targetX: spring(link.target.x),
+                targetY: spring(link.target.y)
+            },
+            data: link
+        }));
+        const defaultLinksConfig = linksList.map(link => ({
+            key: `${link.source.x}-${link.target.y}-${link.source.y}-${link.target.x}`,
+            style: {
+                sourceX: link.source.x,
+                sourceY: link.source.y,
+                targetX: link.source.x,
+                targetY: link.source.y
+            },
+            data: link
+        }));
+
+        console.log(linksList);
+
+        const links = (
+            <TransitionMotion
+                willEnter={this.linkWillEnter.bind(this)}
+                willLeave={this.linkWillLeave.bind(this)}
+                defaultStyles={defaultLinksConfig}
+                styles={linksConfig}>
+                {
+                    linksConfig => {
+                        return (
+                            <g transform="translate(0,0)">
+                                {
+                                    linksConfig.map(
+                                        config => {
+                                            return (
+                                                <path key={config.key} fill="none" stroke="black" className="link"
+                                                    d={this.diagonal(config.data, nodeWidth, nodeHeight)} />
+                                            );
+                                        }
+                                    )
+                                }
+                            </g>
+                        );
+                    }
+                }
+            </TransitionMotion>
+        );
 
 
-    componentWillReceiveProps() {
-        const oldNodesList = this.props.nodesList;
-        this.setState({ oldNodesList });
+        return (
+        <Fragment>
+            {nodes}
+            {links}
+        </Fragment>
+        );
     }
+
 
 
     nodeWillEnter(node) {
-        const nodesList = this.state.oldNodesList || this.props.nodesList;
-        const { x, y } = this.findParent(node.data, nodesList);
+        const { nodeList } = this.state;
+        const { x, y } = this.findParent(node.data, nodeList);
         return { x, y };
     }
 
 
     nodeWillLeave(node) {
-        const { nodesList } = this.props;
-        const { x, y } = this.findParent(node.data, nodesList);
+        const { nodeList } = this.state;
+        const { x, y } = this.findParent(node.data, nodeList);
         return {
             x: spring(x),
             y: spring(y)
@@ -135,53 +202,125 @@ export default class NodesGroup extends Component {
 
 
     findParent(node, nodesList) {
-        let parent = _.find(nodesList, { id: node.parent.id });
+        let parent = this.findNode(nodesList, node.parentId);
         parent = parent ? parent : this.findParent(node.parent, nodesList);
         return parent;
     }
 
+    findNode(root, _id) {
+        if (root.data._id === _id) {
+            return root;
+        } else if (root.children && root.children.length > 0) {
+            for (let i = 0; i < root.children.length; i++) {
+                let childRoot = root.children[i];
+                let node = this.findNode(childRoot, _id);
+                if(node){
+                    return node;
+                }
+            }
+            return null;
+        } else {
+            return null;
+        }
+    }
+
+    findNodeAndUpdate(root, _id, sources){
+        if(root.data._id === _id){
+            if (root.children) {
+                root.children2 = root.children;
+                let result = delete root.children;
+            }
+
+            else if (root.children2) {
+                root.children = root.children2;
+                delete root.children2;
+            }
+
+            if(root.children || root.children2){
+                sources.push(root.data._id);
+            }
+
+            return root;
+        } else if(root.children && root.children.length > 0){
+            let newChildren = []
+            for(let i=0; i<root.children.length; i++){
+                let childRoot = root.children[i];
+                let updatedNode = this.findNodeAndUpdate(childRoot, _id, sources);
+                newChildren.push(updatedNode);
+            }
+            root.children = newChildren;
+            return root;
+        } else {
+            return root;
+        }
+    }
+
 
     handleGroupClick(d) {
-        /* has no children, do nothing 
-        if (!d.children && !d._children) {
+        if(!d.children && !d._children) {
             return;
         }
+        const { nodeList } = this.state;
+        
+        let linkSources = [];
+        let nodeListUpdated = this.findNodeAndUpdate(nodeList, d._id, linkSources);
 
-        const data = d.ref;
+        console.log(this.state.linksList);
+        console.log(linkSources);
 
-        console.log({data});
+        const { linksList } = this.state;
 
-        if (data.children) {
-            data._children = data.children;
-            data.children = null;
-            this.bfs(this.props.nodeList);
-        } else {
-            data.children = data._children;
-            data.children = null;
-            this.bfs(this.props.nodeList);
-        } */
+        let linksListUpdated = linksList.filter(link => {
+            for(let i=0; i<linkSources.length; i++){
+                let source = linkSources[i];
+                if(source === link.source.data._id){
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        console.log({linksListUpdated});
+
+        this.setState({
+            nodeList: nodeListUpdated,
+            linksList: linksListUpdated,
+            oldLinksList: linksList
+        });
     }
 
-    findPathInTree(d) {
-        let path;
-
-        /* root node */
-        if (d.path.length == 1) {
-            path = ['pedigreeTree'];
-            return path;
+    findLink(node, linksList) {
+        let source = linksList.filter(item => item.target.data._id == node.data._id)[0];
+        if (source) {
+            return source.target;
         }
-
-        /* create the path to query in the baobab tree */
-        path = _.tail(d.path);
-        path = _.reduce(path, (result, id) => {
-            result.push((d) => d.id == id);
-            return result;
-        }, []);
-        path = _.zip(_.fill(Array(path.length), 'children'), path);
-        path = _.flatten(path);
-        path = _.compact(path);
-        path.unshift('pedigreeTree');
-
-        return path;
+        if (!node.parent) {
+            return node;
+        }
+        return this.findSource(node.parent, linksList);
     }
+
+    linkWillEnter(link) {
+        const { linksList } = this.state;
+        const { x, y } = this.findLink(link.data.source, linksList);
+        return {
+            sourceX: x,
+            sourceY: y,
+            targetX: x,
+            targetY: y
+        };
+    }
+
+    linkWillLeave(link) {
+        const { linksList } = this.state;
+        const linkSource = this.findLink(link.data.source, linksList);
+        const {x, y} = linkSource;
+        return {
+            sourceX: spring(x),
+            sourceY: spring(y),
+            targetX: spring(x),
+            targetY: spring(y)
+        };
+    }
+
 };

@@ -4,6 +4,8 @@ import './Visualize.css';
 
 import { connect } from 'react-redux';
 
+import Tree from 'react-d3-tree';
+
 import Spinner from '../components/Spinner/Spinner';
 import CollapsibleTree from '../components/d3/CollapsibleTree/CollapsibleTree';
 
@@ -44,7 +46,12 @@ class VisualizePage extends Component {
     }
 
     componentDidMount() {
-        this.props.getStoriesTree(this.props.match.params.project_id, this.props.token);
+        //this.props.getStoriesTree(this.props.match.params.project_id, 'story-tree', this.props.token);
+        this.props.getStoriesTree(this.props.match.params.project_id, 'actor-tree', this.props.token);
+
+        console.log(this.props.storiesTree);
+
+
         const dimensions = this.treeContainer.current.getBoundingClientRect();
         this.setState({
             translate: {
@@ -61,28 +68,31 @@ class VisualizePage extends Component {
                 {this.props.isLoading ? (
                     <Spinner />
                 ) : (
-                        <div ref={this.treeContainer} className="visualize-container">
-                            
-                            <CollapsibleTree data={this.props.storiesTree} width="1000" height="1200"/>
+                        <div ref={this.treeContainer} style={{ width: '1200px', height: '800px' }} >
+
+                           
+
+                            <CollapsibleTree data={this.props.storiesTree} width="1000" height="1200" />
 
                         </div>
+                        
                     )}
 
             </Fragment>);
     }
 }
 
+
 /*
-<Tree data={this.props.storiesTree}
+<div ref={this.treeContainer} className="visualize-container">
+
+                            <CollapsibleTree data={this.props.storiesTree} width="1000" height="1200"/>
+
+                        </div>
+
+                         <Tree data={this.props.storiesTree}
                                 translate={this.state.translate}
-                                allowForeignObjects
-                                orientation={'vertical'}
-                                nodeLabelComponent={{
-                                    render: <NodeLabel className='myLabelComponentInSvg' />,
-                                    foreignObjectWrapper: {
-                                        y: 24
-                                    }
-                                }}/>
+                                orientation={'vertical'} />
 */
 
 function mapStateToProps(state) {
@@ -97,10 +107,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getStoriesTree: (projectId, token) => {
-            dispatch(storyActions.getStoriesTree(projectId, token));
+        getStoriesTree: (projectId, type, token) => {
+            dispatch(storyActions.getStoriesTree(projectId, type, token));
         }
-    };
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VisualizePage);
