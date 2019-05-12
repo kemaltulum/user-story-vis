@@ -6,6 +6,7 @@
     "d3": "^5.9.2",
     "loadash": "^1.0.0",
     "react": "^16.8.5",
+    "react-card-flip": "^0.7.1",
     "react-d3-tree": "^1.12.3",
     "react-dom": "^16.8.5",
     "react-motion": "^0.5.2",

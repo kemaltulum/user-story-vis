@@ -48,6 +48,61 @@ function getStoriesTree(projectId, type, token) {
     }
 }
 
+function getUniqueActors(projectId, token){
+    return dispatch => {
+        storyService.getStoriesTree(projectId, "unique-actors", token)
+            .then(
+                treeNodes => {
+                    let uniqueActors = treeNodes.map(node => { return { name: node.name, _id: node._id};});
+                    dispatch({
+                        type: 'GET_UNIQUE_ACTORS',
+                        payload: { uniqueActors }
+                    });
+                },
+                error => {
+                    dispatch({
+                        type: 'STORIES_FAILURE',
+                        payload: { error }
+                    });
+                }
+            );
+    }
+    
+}
+
+function filterStories(projectId, actorFilter, keyword, token){
+    return dispatch => {
+        dispatch({
+            type: 'STORIES_REQUEST',
+            payload: {}
+        });
+        storyService.getStories(projectId, token)
+            .then(
+                stories => {
+                    stories = stories.filter(story => {
+                        let actorMatch = false, keywordMatch = false;
+                        if(actorFilter && actorFilter.length > 0){
+                            actorMatch = story.actor.toLowerCase() === actorFilter.toLowerCase();
+                        }
+                        if(keyword && keyword.length > 0){
+                            keywordMatch = story.full_text.toLowerCase().includes(keyword.toLowerCase());
+                        }
+                        return actorMatch && keywordMatch;
+                    });
+                    dispatch({
+                        type: 'GET_STORIES',
+                        payload: { stories }
+                    });
+                },
+                error => {
+                    dispatch({
+                        type: 'STORIES_FAILURE',
+                        payload: { error }
+                    });
+                }
+            );
+    }
+}
 
 function addStorySingle(projectId, fullText, token) {
     return dispatch => {
@@ -101,5 +156,7 @@ export const storyActions = {
     getStories,
     getStoriesTree,
     addStorySingle,
-    addStoryBulkRaw
+    addStoryBulkRaw,
+    getUniqueActors,
+    filterStories
 };

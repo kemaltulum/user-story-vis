@@ -122,7 +122,8 @@ export default class NodesGroup extends Component {
             </TransitionMotion>
         );
 
-        const { linksList } = this.state;
+        let { linksList } = this.state;
+        linksList = linksList.filter(link => !link.collapsed);
         const linksConfig = linksList.map(link => ({
             key: `${link.source.x}-${link.target.y}-${link.source.y}-${link.target.x}`,
             style: {
@@ -270,22 +271,24 @@ export default class NodesGroup extends Component {
 
         const { linksList } = this.state;
 
-        let linksListUpdated = linksList.filter(link => {
+        linksList.forEach(link => {
             for(let i=0; i<linkSources.length; i++){
                 let source = linkSources[i];
                 if(source === link.source.data._id){
-                    return false;
+                    if(link.collapsed){
+                        link.collapsed = false;
+                    } else {
+                        link.collapsed = true;
+                    }
                 }
             }
-            return true;
         });
 
-        console.log({linksListUpdated});
+        console.log({linksList});
 
         this.setState({
             nodeList: nodeListUpdated,
-            linksList: linksListUpdated,
-            oldLinksList: linksList
+            linksList: linksList
         });
     }
 

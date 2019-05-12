@@ -30,6 +30,12 @@ const storyReducer = (state = {
                 isLoading: false
             };
             break;
+        case 'GET_UNIQUE_ACTORS':
+            state = {
+                ...state,
+                ...action.payload
+            };
+            break;
         case 'ADD_STORY_SINGLE':
             state = {
                 ...state,

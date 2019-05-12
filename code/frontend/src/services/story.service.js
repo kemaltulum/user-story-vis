@@ -140,6 +140,12 @@ function getStoriesTree(projectId, type, token) {
             .then(resData => {
                 return createTreeStructureFronNodes(resData);
             });
+    } else if(type === "unique-actors"){
+        return getStoryTree(projectId, "actor-tree", token)
+            .then(resData => {
+                console.log(resData);
+                return resData;
+            });
     }
 }
 
@@ -163,6 +169,8 @@ function getStoryTree(projectId, nodeType, token) {
         project_id: projectId,
         nodeType: nodeType
     };
+
+    console.log("Get story tree");
 
     return graph(query, variables, token)
         .then(handleResponse)
