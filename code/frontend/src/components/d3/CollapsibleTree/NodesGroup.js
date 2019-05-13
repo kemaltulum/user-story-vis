@@ -280,8 +280,6 @@ export default class NodesGroup extends Component {
             }
         });
 
-        console.log({linksList});
-
         this.setState({
             nodeList: nodeListUpdated,
             linksList: linksList
