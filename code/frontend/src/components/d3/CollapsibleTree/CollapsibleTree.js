@@ -28,6 +28,15 @@ class CollapsibleTree extends Component {
 
     short(text) {
         let short = '';
+        if(text && text.lenght <= 15){
+            let append = (16 - text.length)/2;
+            for(let i=0; i<append; i++){
+                short += " ";
+            }
+            short += text;
+            console.log("--"+short+"--")
+            return short;
+        }
         if (text && text.length > 15) {
             let arr = text.split(' ');
             if (arr.length > 2) {
@@ -184,7 +193,7 @@ class CollapsibleTree extends Component {
                                         */
                                         <g key={config.x + "-" + config.y} className="node" transform={`translate(${config.y}, ${config.x})`}>
                                             <g>
-                                                <rect height="55" width="136" y="2" x="2" strokeWidth="1.5" stroke="#261D3D" fill="#a8a3b1" />
+                                                <rect height="55" width="136" y="2" x="2" strokeWidth="1.5" stroke="#261D3D" fill="#e5def9" />
                                                 {
                                                     ((config.data.children && config.data.children.length > 0) || (config.data.children2 && config.data.children2.length > 0)) &&
                                                     <Fragment>
