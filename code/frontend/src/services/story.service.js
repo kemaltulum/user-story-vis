@@ -131,14 +131,14 @@ function createStoryTrees(stories) {
 
 function getStoriesTree(projectId, type, token) {
     if(type === "story-tree") {
-        return getStories(projectId, token)
+        return getStoryTree(projectId, type, token)
             .then(resData => {
-                return createStoryTrees(resData);
+                return createTreeStructureFromNodes(resData);
             });
     } else if(type === "actor-tree"){
         return getStoryTree(projectId, type, token)
             .then(resData => {
-                return createTreeStructureFronNodes(resData);
+                return createTreeStructureFromNodes(resData);
             });
     } else if(type === "unique-actors"){
         return getStoryTree(projectId, "actor-tree", token)
@@ -180,7 +180,8 @@ function getStoryTree(projectId, nodeType, token) {
         });
 }
 
-function createTreeStructureFronNodes(treeNodes){
+function createTreeStructureFromNodes(treeNodes){
+    console.log(treeNodes);
     let treeRoot;
     for(let i=0; i<treeNodes.length; i++){
         if(treeNodes[i].isRoot){
@@ -196,6 +197,7 @@ function createTreeStructureFronNodes(treeNodes){
 }
 
 function createTreeHelper(root, nodes) {
+    console.log({root});
     if(!root.children || root.children.length === 0){
         return root;
     }

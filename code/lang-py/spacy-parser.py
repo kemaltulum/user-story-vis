@@ -113,6 +113,13 @@ for story in user_stories:
     if element in parsed_story:
         action = "I want to " + lower_first_word(parsed_story[element])
         parsed_story["tokens"][element] = tokenize_tag_words(action)
+
+    element = "benefit"
+
+    if element in parsed_story:
+        benefit = lower_first_word(parsed_story[element])
+        parsed_story["tokens"][element] = tokenize_tag_words(benefit)
+
     parsed_stories.append(parsed_story)
 
 print(str(json.dumps(parsed_stories)))
