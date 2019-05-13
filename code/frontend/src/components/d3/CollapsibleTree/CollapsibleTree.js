@@ -112,19 +112,36 @@ class CollapsibleTree extends Component {
         this.props.showStories(stories);
     }
 
+    countLeaves(root){
+        if(!root.children || root.children.length === 0){
+            return 1;
+        } else {
+            let count = 0
+            for(let i=0; i<root.children.length; i++){
+                let childRoot = root.children[i];
+                count += this.countLeaves(childRoot);
+            }
+            return count;
+        }
+
+    }
+
     render() {
         const { data } = this.props;
 
         let width = this.props.width;
         let height = this.props.height;
 
-        if(data.children && data.children.length > 10) {
-           height = data.children.length * 150;
+        let nLeaves = this.countLeaves(data);
+        let newHeight = nLeaves * 105;
+
+        if(newHeight > height){
+            height = newHeight;
         }
 
         const nodeWidth = 154;
         const nodeHeight = 58;
-        const margin = {y: nodeHeight/2+40, x:nodeWidth/2+40};
+        const margin = {y: nodeHeight, x:nodeWidth+20};
 
         const treeLayout = d3.tree().size([height - 2 * margin.y, width - 2*margin.x]);
 
@@ -140,6 +157,8 @@ class CollapsibleTree extends Component {
 
         const nodeArr = []
         this.bfs(nodeArr, nodeList);
+
+
 
         const linksList = nodeList.links();
 
@@ -172,7 +191,7 @@ class CollapsibleTree extends Component {
                                                         <rect className="node-cursor" onClick={this.handleGroupClick.bind(this, config.data)} rx="15" id="svg_3" height="55" width="27" y="2" x="128" fillOpacity="null" strokeOpacity="null" strokeWidth="1.5" stroke="#261D3D" fill="#261D3D" />
                                                         {
                                                             config.data.children2 &&
-                                                            <path className="node-cursor" onClick={this.handleGroupClick.bind(this, config.data)} d="m145.957275,43.158844l2.466873,-2.617722l2.465591,-2.61879l-2.466888,-2.620651l-2.465576,-2.618637l0,2.912262c-0.604416,0 -1.306625,0 -1.541916,0c-1.12175,0.058113 -2.506256,-1.566658 -3.979187,-3.661186c-0.549088,-0.734398 -1.103058,-1.542366 -1.69014,-2.271935c0.587082,-0.730408 1.140213,-1.537476 1.69014,-2.271835c1.472931,-2.091599 2.857437,-3.719345 3.977661,-3.660141l1.543442,-0.000969l0,2.916115l2.465576,-2.61969l2.466888,-2.621704l-2.466888,-2.624466l-2.465576,-2.620651l0,2.914246l-1.542603,0c-2.291107,0.059059 -4.003372,2.563507 -5.501709,4.598969c-1.487427,2.147858 -2.824402,3.764832 -3.599854,3.660172l-4.42337,0l0,4.652328l4.42482,0c0.774765,-0.105713 2.112427,1.512314 3.599701,3.66011c1.49765,2.03653 3.209305,4.538864 5.501099,4.599014l1.541916,0l0,2.915161l0,0z" stroke-opacity="null" stroke-width="1" stroke="#fff" fill="#261D3D" />
+                                                            <path className="node-cursor" onClick={this.handleGroupClick.bind(this, config.data)} d="m145.957275,43.158844l2.466873,-2.617722l2.465591,-2.61879l-2.466888,-2.620651l-2.465576,-2.618637l0,2.912262c-0.604416,0 -1.306625,0 -1.541916,0c-1.12175,0.058113 -2.506256,-1.566658 -3.979187,-3.661186c-0.549088,-0.734398 -1.103058,-1.542366 -1.69014,-2.271935c0.587082,-0.730408 1.140213,-1.537476 1.69014,-2.271835c1.472931,-2.091599 2.857437,-3.719345 3.977661,-3.660141l1.543442,-0.000969l0,2.916115l2.465576,-2.61969l2.466888,-2.621704l-2.466888,-2.624466l-2.465576,-2.620651l0,2.914246l-1.542603,0c-2.291107,0.059059 -4.003372,2.563507 -5.501709,4.598969c-1.487427,2.147858 -2.824402,3.764832 -3.599854,3.660172l-4.42337,0l0,4.652328l4.42482,0c0.774765,-0.105713 2.112427,1.512314 3.599701,3.66011c1.49765,2.03653 3.209305,4.538864 5.501099,4.599014l1.541916,0l0,2.915161l0,0z" strokeOpacity="null" strokeWidth="1" stroke="#fff" fill="#261D3D" />
                                                         }
                                                         {
                                                             config.data.children &&

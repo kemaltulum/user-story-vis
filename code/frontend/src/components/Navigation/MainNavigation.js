@@ -15,7 +15,8 @@ class MainNavigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: null
+      current: null,
+      projectID: this.props.location.pathname.substr(1, this.props.location.pathname.lastIndexOf("/") - 1)
     }
   }
   componentDidMount() {
@@ -27,7 +28,8 @@ class MainNavigation extends Component {
       this.props.projects.forEach(element => {
         if (element._id === projectID) {
           this.setState({
-            current: element
+            current: element,
+            projectID: projectID
           })
         }
       });

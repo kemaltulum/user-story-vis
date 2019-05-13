@@ -66,6 +66,7 @@ class VisualizePage extends Component {
         }
 
 
+        /*
         const dimensions = this.treeContainer.current.getBoundingClientRect();
         this.setState({
             translate: {
@@ -73,6 +74,7 @@ class VisualizePage extends Component {
                 y: dimensions.height / 2
             }
         });
+        */
     }
 
     componentDidUpdate(prevProps) {
@@ -115,11 +117,9 @@ class VisualizePage extends Component {
                 {this.props.isLoading ? (
                     <Spinner />
                 ) : (
-                        <div className="tree-container" ref={this.treeContainer} style={{ width: '1200px', height: '800px' }} >
+                        <div className="tree-container" ref={this.treeContainer} >
 
-                           
-
-                            <CollapsibleTree data={this.props.storiesTree} showStories={this.showStories} width="1000" height="1200" />
+                            <CollapsibleTree data={this.props.storiesTree} showStories={this.showStories} width="1500" height="1200" />
 
                         </div>
                         

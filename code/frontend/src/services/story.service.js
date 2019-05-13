@@ -143,7 +143,6 @@ function getStoriesTree(projectId, type, token) {
     } else if(type === "unique-actors"){
         return getStoryTree(projectId, "actor-tree", token)
             .then(resData => {
-                console.log(resData);
                 return resData;
             });
     }
@@ -191,7 +190,6 @@ function getStoryTree(projectId, nodeType, token) {
         nodeType: nodeType
     };
 
-    console.log("Get story tree");
 
     return graph(query, variables, token)
         .then(handleResponse)
@@ -202,7 +200,6 @@ function getStoryTree(projectId, nodeType, token) {
 }
 
 function createTreeStructureFromNodes(treeNodes){
-    console.log(treeNodes);
     let treeRoot;
     for(let i=0; i<treeNodes.length; i++){
         if(treeNodes[i].isRoot){
@@ -218,7 +215,6 @@ function createTreeStructureFromNodes(treeNodes){
 }
 
 function createTreeHelper(root, nodes) {
-    console.log({root});
     if(!root.children || root.children.length === 0){
         return root;
     }
