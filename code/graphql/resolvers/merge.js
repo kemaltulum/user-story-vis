@@ -8,6 +8,10 @@ const projectLoader = new DataLoader(projectIds => {
     return projects(projectIds);
 });
 
+const storyLoader = new DataLoader(storyIds => {
+    return stories(storyIds);
+});
+
 const userLoader = new DataLoader(userIds => {
     return User.find({ _id: { $in: userIds } });
 });
@@ -25,6 +29,28 @@ const projects = async projectIds => {
             return transformProject(project);
         })
     } catch (error) {
+        throw error;
+    }
+}
+
+const stories = async storyIds => {
+    try {
+        const stories = await Story.find({_id: {$in: storyIds}});
+        const returnedStories = [];
+        storyIds.forEach(element => {
+            let storiesFound = stories.filter(story => story._id.toString() === element.toString());
+            returnedStories.push(storiesFound[0]);
+        });
+        /*
+        stories.sort((a, b) => {
+            return (
+                stories.indexOf(a._id.toString()) - stories.indexOf(b._id.toString())
+            );
+        });*/
+        return returnedStories.map(story => {
+            return transformStory(story);
+        });
+    } catch(error) {
         throw error;
     }
 }
@@ -51,6 +77,15 @@ const project = async projectId => {
     }
 }
 
+const story = async storyId => {
+    try {
+        const story = await storyLoader.load(storyId.toString());
+        return story;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const transformProject = (project) => {
     return {
         ...project._doc,
@@ -67,5 +102,14 @@ const transformStory = (story) => {
     }
 }
 
+const transformTreeNode = (treeNode) => {
+    return {
+        ...treeNode._doc,
+        _id: treeNode.id,
+        stories: () => storyLoader.loadMany(treeNode._doc.story_ids)
+    };
+}
+
 exports.transformProject = transformProject;
 exports.transformStory = transformStory;
+exports.transformTreeNode = transformTreeNode;

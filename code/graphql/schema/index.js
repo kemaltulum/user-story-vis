@@ -35,7 +35,7 @@ type TreeNode {
   name: String
   nodeType: String!
   project_id: String!
-  story_ids: [String!]!
+  stories: [Story!]!
   isRoot: Boolean
   children: [String!]!
 }

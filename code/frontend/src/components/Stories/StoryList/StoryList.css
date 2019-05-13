@@ -1,7 +1,5 @@
 .stories__list {
     width: 100%;
-    max-width: 90%;
-    margin: 1rem auto;
     list-style: none;
     padding: 0;
   }

@@ -5,7 +5,28 @@
     height: 800px;
 }
 
+.tree-container{
+    margin-bottom: 300px;
+}
+
 .myLabelComponentInSvg {
     position: relative; bottom: 30px; right: 15px;
     font-size: 10px;
+}
+
+.stories-showcase{
+    position: fixed;
+    left: 250px;
+    bottom: -308px;
+    height: 300px;
+    transition: bottom 0.4s linear;
+    background: white;
+    overflow: auto;
+    width: 100%;
+    max-width: 1583px;
+    border-top: 8px solid #261D3D;
+}
+
+.show{
+   bottom: 0; 
 }

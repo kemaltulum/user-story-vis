@@ -7,7 +7,7 @@ const storyTree = require('../../util/storyTree');
 const Bull = require('bull');
 
 
-const { transformStory } = require('./merge');
+const { transformStory, transformTreeNode } = require('./merge');
 
 const { parseSingle, parseAllRaw } = require('../../util/story');
 
@@ -86,10 +86,7 @@ module.exports = {
             let treeNodes = await TreeNode.find({ project_id: projectId, nodeType: nodeType });
 
             return treeNodes.map(treeNode => {
-                return {
-                    ...treeNode._doc,
-                    _id: treeNode.id
-                };
+                return transformTreeNode(treeNode);
             });
 
         } catch (error) {

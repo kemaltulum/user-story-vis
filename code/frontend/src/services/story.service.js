@@ -159,7 +159,28 @@ function getStoryTree(projectId, nodeType, token) {
             nodeType
             name
             project_id
-            story_ids
+            stories {
+                _id
+                full_text
+                actor
+                action
+                benefit
+                is_parsed
+                id_user
+                tokens {
+                        action {
+                            main_verb
+                            main_object {
+                                chunk
+                                text
+                            }
+                            sec_verbs {
+                                verb
+                                object
+                            }
+                        }
+                    }
+            }
             isRoot
             children
         }}

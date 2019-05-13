@@ -11,7 +11,7 @@
 
 .stories__wrapper{
   float: left;
-  margin: 1rem calc((100% - 1200px)/11);
+  margin: 1rem calc((100% - 1200px)/10);
 }
 
 @media screen and (max-width: 600px) {

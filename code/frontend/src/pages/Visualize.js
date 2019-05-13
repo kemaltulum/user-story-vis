@@ -8,6 +8,8 @@ import Tree from 'react-d3-tree';
 
 import Spinner from '../components/Spinner/Spinner';
 import CollapsibleTree from '../components/d3/CollapsibleTree/CollapsibleTree';
+import StoryList from '../components/Stories/StoryList/StoryList';
+
 
 import { storyActions } from '../actions/story.actions';
 
@@ -38,13 +40,20 @@ class NodeLabel extends React.PureComponent {
 
 
 class VisualizePage extends Component {
-    state = {}
+    
 
     constructor(props) {
         super(props);
         this.treeContainer = React.createRef();
-    }
+        this.state = {
+            stories: [],
+            showStories: false
+        };
 
+        this.showStories = this.showStories.bind(this);
+
+    }
+    
     componentDidMount() {
         
         const params = new URLSearchParams(this.props.location.search);
@@ -85,6 +94,19 @@ class VisualizePage extends Component {
         //const locationChanged = this.props.history.location !== prevProps.history.location;
     }
 
+    showStories(stories){
+        this.setState({
+            showStories: true,
+            stories: stories
+        });
+    }
+
+    sortStories(stories) {
+        stories.sort((a, b) => {
+            return parseInt(b.id_user) > parseInt(a.id_user);
+        });
+        return stories;
+    }
 
     
     render() {
@@ -93,16 +115,22 @@ class VisualizePage extends Component {
                 {this.props.isLoading ? (
                     <Spinner />
                 ) : (
-                        <div ref={this.treeContainer} style={{ width: '1200px', height: '800px' }} >
+                        <div className="tree-container" ref={this.treeContainer} style={{ width: '1200px', height: '800px' }} >
 
                            
 
-                            <CollapsibleTree data={this.props.storiesTree} width="1000" height="1200" />
+                            <CollapsibleTree data={this.props.storiesTree} showStories={this.showStories} width="1000" height="1200" />
 
                         </div>
                         
                     )}
-
+                <div className={"stories-showcase clearfix " + (this.state.showStories ? 'show' : '')}>
+                    { this.state.stories && 
+                        <StoryList
+                            stories={this.sortStories(this.state.stories)}
+                        />
+                    }
+                </div>
             </Fragment>);
     }
 }
