@@ -81,11 +81,15 @@ function filterStories(projectId, actorFilter, keyword, token){
                 stories => {
                     stories = stories.filter(story => {
                         let actorMatch = false, keywordMatch = false;
-                        if(actorFilter && actorFilter.length > 0){
+                        if(actorFilter !== "" && actorFilter.length > 0){
                             actorMatch = story.actor.toLowerCase() === actorFilter.toLowerCase();
+                        } else{
+                            actorMatch = true;
                         }
-                        if(keyword && keyword.length > 0){
+                        if(keyword !== "" && keyword.length > 0){
                             keywordMatch = story.full_text.toLowerCase().includes(keyword.toLowerCase());
+                        } else {
+                            keywordMatch = true;
                         }
                         return actorMatch && keywordMatch;
                     });
