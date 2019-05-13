@@ -37,7 +37,7 @@ module.exports = {
             { userId: user.id, email: user.email },
             process.env.SECRET_KEY,
             {
-                expiresIn: '1h'
+                expiresIn: '365d'
             }
         );
         return { userId: user.id, token: token, tokenExpiration: 1 };
