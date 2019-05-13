@@ -197,7 +197,14 @@ async function parseAllRaw(story_text) {
         // There are multiple lines
         var lines = story_text.split('\n');
         for (var i = 0; i < lines.length; i++) {
-            stories.push(lines[i]);
+            let story_text = lines[i];
+            
+            if(story_text === "" || story_text.trim().length === 0){
+                continue;
+            }
+
+            console.log(story_text);
+            stories.push(story_text);
         }
     } else {
         stories.push(story_text);
