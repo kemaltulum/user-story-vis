@@ -1,0 +1,29 @@
+{
+    "_id": "5cd95a9acd0a011cfd540332",
+    "id_user": "57",
+    "error_status": {
+        "errors": []
+    },
+    "full_text": "As a Technical Staff member, I want to update the GIS Property Management, so that I can successfully update the transactional Parcel Pin to reference the GIS layer where the Split or Merged Parcel Pin exists.",
+    "is_parsed": true,
+    "tokens": {
+        "action": {
+            "main_object": {
+                "chunk": "the GIS Property Management",
+                "text": "Management"
+            },
+            "main_verb": "update"
+        },
+        "benefit": {
+            "main_object": {
+                "chunk": "the transactional Parcel Pin",
+                "text": "Pin"
+            },
+            "main_verb": "update"
+        }
+    },
+    "benefit": "I can successfully update the transactional Parcel Pin to reference the GIS layer where the Split or Merged Parcel Pin exists",
+    "action": "update the GIS Property Management",
+    "actor": "Technical Staff member",
+    "project_id": "5c97aa634254cb4da66cd285"
+}
