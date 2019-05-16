@@ -49,7 +49,32 @@ function createProject(name, description, token) {
     }
 }
 
+function getMetaData(projectId, type, token){
+    return dispatch => {
+        dispatch({
+            type: 'PROJECTS_REQUEST',
+            payload: {}
+        });
+        projectService.getMetaData(projectId, type, token)
+            .then(
+                metaData => {
+                    dispatch({
+                        type: 'GET_METADATA',
+                        payload: { metaData }
+                    });
+                },
+                error => {
+                    dispatch({
+                        type: 'PROJECTS_FAILURE',
+                        payload: { error }
+                    });
+                }
+            )
+    }
+}
+
 export const projectActions = {
     getProjects,
-    createProject
+    createProject,
+    getMetaData
 };

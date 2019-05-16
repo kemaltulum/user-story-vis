@@ -56,6 +56,32 @@ function createProject(name, description, token) {
         });
 }
 
+function getMetaData(project_id, type, token){
+    const query =
+        `
+        query getMetaData($project_id: String!, $type: String!) {
+            projectMeta(projectId: $project_id, type: $type) {
+              _id
+              type
+              data
+              project_id
+            }
+          }
+    `;
+
+    const variables = {
+        project_id: project_id,
+        type: type
+    }
+
+    return graph(query, variables, token)
+        .then(handleResponse)
+        .then(responseData => {
+            const metaData = responseData.data.projectMeta;
+            return metaData;
+        });
+}
+
 function handleResponse(res) {
     let errorExists = false;
     if (res.status !== 200 && res.status !== 201) {
@@ -74,5 +100,6 @@ function handleResponse(res) {
 
 export const projectService = {
     getProjects,
-    createProject
+    createProject,
+    getMetaData
 };

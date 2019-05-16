@@ -106,6 +106,12 @@ class MainNavigation extends Component {
                   <li>
                     <NavLink to={"/" + this.state.projectID + "/visualize?type=actor-tree"}>Actor Tree</NavLink>
                   </li>
+                  <li>
+                    <NavLink to={"/" + this.state.projectID + "/visualize/cloud"}>Word Cloud</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/" + this.state.projectID + "/visualize/entity"}>Entity Tree</NavLink>
+                  </li>
                 </React.Fragment>
               )}
             </ul>

@@ -1,0 +1,13 @@
+As a user, I can create account, so that I can use the web application
+As a signed user, I can login my account, so that I can see the projects assigned to me
+As a signed user, I can choose a project, so that I can see the user stories belonging to that project
+As a signed user, I can input user stories as CSV file so that I can quickly see the visualizations of my existing user stories
+As a signed user, I want to add user stories one by one into my projects
+As a signed user, I want to see all the user stories of a project on a single page
+As a signed user, I want to assign priority values for the user stories
+As a signed user, I want to see different actors and the relations between them
+As a signed user, I want to filter user stories based on actors and keyword, so that I can focus on different parts of a project
+As a signed user, I want to sort user stories based on actor
+As a project manager, I want to create projects of my company
+As a project manafer, I want to assign projects to employees, so that we can collaborate with each other
+

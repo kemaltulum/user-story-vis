@@ -43,6 +43,22 @@ body {
   cursor: pointer;
 }
 
+.form-select{
+  background: #261D3D;
+  font: inherit;
+  border: 1px solid #261D3D;
+  border-radius: 3px;
+  padding: 0.25rem 1rem;
+  margin-right: 1rem;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.26);
+  color: white;
+  cursor: pointer;
+}
+
+.form-select::placeholder{
+  color: white;
+}
+
 .form-actions .btn.btn-secondary {
   background: #700154;
   border-color: #700154;

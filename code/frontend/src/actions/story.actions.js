@@ -25,6 +25,7 @@ function getStories(projectId, token) {
 }
 
 function getStoriesTree(projectId, type, token) {
+    console.log("Stoires tree");
     return dispatch => {
         dispatch({
             type: 'STORIES_REQUEST',

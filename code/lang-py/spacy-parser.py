@@ -2,7 +2,7 @@ import sys
 import json
 import re
 import spacy
-from spacy.symbols import nsubj, dobj, pobj, NOUN, VERB
+from spacy.symbols import nsubj, dobj, pobj, NOUN, VERB, aux
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -11,7 +11,7 @@ def get_verbs_and_nouns(doc):
     verbs = []
     nouns = []
     for token in doc:
-        if token.pos == VERB:
+        if token.pos == VERB and token.dep != aux and token.text != "want":
             verbs.append(token)
         elif token.pos == NOUN:
             nouns.append(token)
@@ -49,7 +49,7 @@ def tokenize_tag_words(text):
     # Do not include I want to phrase
     res = {}
     try:
-        verbs, nouns = get_verbs_and_nouns(doc[3:])
+        verbs, nouns = get_verbs_and_nouns(doc)
         main_verb = verbs[0]
 
         # Add verb
@@ -57,7 +57,10 @@ def tokenize_tag_words(text):
 
         # Create and add main object
         obj_ = get_object_with_chunk(main_verb, doc)
-        res["main_object"] = obj_
+        if obj_ is None and len(nouns) > 0:
+            res["main_object"] = {"text": nouns[0].text}
+        else:
+            res["main_object"] = obj_
 
         num_verbs = len(verbs)
         if num_verbs > 1 and "and" in text:

@@ -10,7 +10,7 @@
 
 .modal__header {
   padding: 1rem;
-  background: #5101d1;
+  background: #261D3D;
   color: white;
 }
 
@@ -31,7 +31,7 @@
 
 @media (min-width: 768px) {
   .modal {
-    width: 30rem;
-    left: calc((100% - 30rem) / 2);
+    width: 40rem;
+    left: calc((100% - 40rem) / 2);
   }
 }

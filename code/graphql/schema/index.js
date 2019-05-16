@@ -1,6 +1,7 @@
 const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
+scalar JSONObject
 type Project {
     _id: ID!
     name: String!
@@ -83,6 +84,13 @@ type TagData {
   benefit: TagDetail
 }
 
+type ProjectMeta {
+  _id: ID!
+  project_id: String!
+  type: String!
+  data: JSONObject!
+}
+
 input StoryInput {
   project_id: String!
   full_text: String!
@@ -98,7 +106,8 @@ type RootQuery {
     login(email: String!, password: String!): AuthData!
     stories(projectId: String!): [Story!]!
     verifyToken(token: String!): TokenData!
-    storyTree(projectId: String, nodeType: String): [TreeNode!]!
+    storyTree(projectId: String!, nodeType: String!): [TreeNode!]!
+    projectMeta(projectId: String!, type: String!): ProjectMeta
 }
 
 type RootMutation {

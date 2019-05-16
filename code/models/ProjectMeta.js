@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var TreeMetaSchema = new Schema({
-    dataType: {
+var ProjectMetaSchema = new Schema({
+    type: {
         type: String,
+        required: true
     },
 
     data: {
@@ -19,6 +20,6 @@ var TreeMetaSchema = new Schema({
 }, { timestamps: true });
 
 
-var TreeMeta = mongoose.model('TreeMeta', TreeMetaSchema);
+var ProjectMeta = mongoose.model('ProjectMeta', ProjectMetaSchema);
 
-module.exports = TreeMeta;
+module.exports = ProjectMeta;

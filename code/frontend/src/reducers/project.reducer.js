@@ -28,6 +28,27 @@ const projectReducer = (state = {
                 ...action.payload
             };
             break;
+        case 'GET_METADATA':
+            if(action.payload.metaData && action.payload.metaData.type === 'word-cloud'){
+                state = {
+                    ...state,
+                    wordCloud: action.payload.metaData,
+                    isLoading: false
+                };
+            } else if (action.payload.metaData && action.payload.metaData.type === 'entity-graph'){
+                state = {
+                    ...state,
+                    entityGraph: action.payload.metaData,
+                    isLoading: false
+                };
+            }else {
+                state = {
+                    ...state,
+                    ...action.payload,
+                    isLoading: false
+                };
+            }
+            break;
         default:
             break;
     }

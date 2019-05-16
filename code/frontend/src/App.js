@@ -8,6 +8,8 @@ import AuthPage from './pages/Auth';
 import ProjectsPage from './pages/Projects';
 import StoryPage from './pages/Story';
 import VisualizePage from './pages/Visualize';
+import WordCloudPage from './pages/WordCloud';
+import EntityGraphPage from './pages/EntityGraph';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 
@@ -82,6 +84,12 @@ class App extends Component {
               {this.props.token && (
                   <Route path="/projects" component={ProjectsPage} />
                 )}
+              {this.props.token && (
+                <Route path="/:project_id/visualize/entity" component={EntityGraphPage} />
+              )}
+              {this.props.token && (
+                <Route path="/:project_id/visualize/cloud" component={WordCloudPage} />
+              )}
               {this.props.token && (
                 <Route path="/:project_id/visualize" component={VisualizePage} />
               )}

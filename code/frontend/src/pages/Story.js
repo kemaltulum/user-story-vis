@@ -122,7 +122,7 @@ class StoryPage extends Component {
                             <form>
                                 <div className="form-control">
                                     <label htmlFor="story">User Story</label>
-                                    <textarea type="text" id="story" rows="10" ref={this.rawTextElRef} />
+                                    <textarea type="text" id="story" rows="20" ref={this.rawTextElRef} />
                                 </div>
                             </form>
                         </Modal>
@@ -140,7 +140,7 @@ class StoryPage extends Component {
                         </div>
                         <div className="filter-container">
                             {this.props.uniqueActors &&
-                                <select name="actor" ref={this.actorFilterRef}>
+                                <select className="form-select" name="actor" ref={this.actorFilterRef}>
                                     <option value="">No Actor Filter</option>
                                     {
                                         this.props.uniqueActors.map(actor => {
@@ -151,7 +151,7 @@ class StoryPage extends Component {
                                     }
                                 </select>
                             }
-                            <input ref={this.storyKeywordRef} type="text" placeholder="Enter a keyword" />
+                            <input className="form-select" ref={this.storyKeywordRef} type="text" placeholder="Enter a keyword" />
                             <button className="btn" onClick={this.filterStories.bind(this)}>
                                 Filter
                             </button>

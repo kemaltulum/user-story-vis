@@ -2,7 +2,7 @@ const Bull = require('bull');
 const Story = require('../models/Story');
 const { capitalize, arrContain } = require('./index');
 const TreeNode = require('../models/TreeNode');
-const TreeMeta = require('../models/TreeMeta');
+const ProjectMeta = require('../models/ProjectMeta');
 
 
 /*
@@ -12,10 +12,10 @@ storyTreeQueue.process(async (job, data) => {
     return createActorTree(data);
 }); */
 
-function transformActorName(name){
+function transformActorName(name) {
     let items = name.split("_");
     let res = ""
-    if(items.length == 0) {
+    if (items.length == 0) {
         items = name.split(" ");
         for (let i = 0; i < items.length; i++) {
             res += capitalize(items[i]);
@@ -34,28 +34,27 @@ function transformActorName(name){
     return res;
 }
 
-async function saveTree(root){
-    console.log(root);
-    if(!root.name || !root.project_id){
+async function saveTree(root) {
+    if (!root.name || !root.project_id) {
         return false;
     }
-    if(root.children.length === 0){
+    if (root.children.length === 0) {
         let treeNode = new TreeNode(root);
-        let savedNode =  await treeNode.save();
+        let savedNode = await treeNode.save();
         return savedNode;
     } else {
         let ids = [];
         let childStories = [];
-        for(let i=0; i<root.children.length; i++) {
+        for (let i = 0; i < root.children.length; i++) {
             let treeNode = root.children[i];
             let treeNodeSaved = await saveTree(treeNode);
-            if(treeNodeSaved){
+            if (treeNodeSaved) {
                 childStories = childStories.concat(treeNodeSaved.story_ids);
                 ids.push(treeNodeSaved._id);
             }
         }
         root.children = ids;
-        if(root.nodeType === "actor-tree" && !root.isRoot && root.story_ids) {
+        if (root.nodeType === "actor-tree" && !root.isRoot && root.story_ids) {
             root.story_ids = root.story_ids.filter(elem => !arrContain(childStories, elem));
         }
         let treeNode = new TreeNode(root);
@@ -64,14 +63,40 @@ async function saveTree(root){
     }
 }
 
-async function createActorTree(data){
+async function createGraphs(data) {
+    const projectId = data.projectId;
+    const stories = await Story.find({ project_id: projectId });
+
+    const result = await createActorTree({
+        stories: stories,
+        projectId: projectId
+    });
+
+    await createStoryTree({
+        stories: stories,
+        projectId: projectId
+    });
+
+    await createWordCloud({
+        stories: stories,
+        projectId: projectId,
+        actorsDict: result.actorsDict
+    })
+
+    /*
+    await createEntityGraph({
+        stories: stories,
+        projectId: projectId,
+        actorTree: result.actorTree
+    });*/
+}
+
+async function createActorTree(data) {
 
     const projectId = data.projectId;
-    const storiesAdded = data.stories;
+    const stories = data.stories;
 
-
-    const stories = await Story.find({project_id: projectId});
-    await TreeNode.deleteMany({project_id: projectId, nodeType: "actor-tree"});
+    await TreeNode.deleteMany({ project_id: projectId, nodeType: "actor-tree" });
 
 
     let rootNode = {
@@ -94,19 +119,19 @@ async function createActorTree(data){
 
 
     actors.forEach(actor => {
-        if(actor.name.includes(" ")){
+        if (actor.name.includes(" ")) {
             // Group the tales of the word group
             // Zoning Staff Member => Zoning Staff Member and Staff Member
 
             let actorItems = actor.name.split(" ");
-            for(let i=0; i<actorItems.length - 1; i++) {
+            for (let i = 0; i < actorItems.length - 1; i++) {
                 let actorSubItemsDict = actorItems.slice(i).join("_");
                 if (actorsDict[actorSubItemsDict]) {
                     actorsDict[actorSubItemsDict].stories.push(actor.story_id);
                 } else {
-                    actorsDict[actorSubItemsDict] = { stories: [actor.story_id], children: []};
+                    actorsDict[actorSubItemsDict] = { stories: [actor.story_id], children: [] };
                 }
-            }          
+            }
         } else {
             if (actorsDict[actor.name]) {
                 actorsDict[actor.name].stories.push(actor.story_id);
@@ -118,33 +143,33 @@ async function createActorTree(data){
 
     actorsDictKeys = Object.keys(actorsDict);
 
-    for(let i=0; i<actorsDictKeys.length; i++){
+    for (let i = 0; i < actorsDictKeys.length; i++) {
         let key = actorsDictKeys[i];
         let value = actorsDict[key];
 
         let notUnique = false;
         actorsDictKeys.forEach(element => {
             if (key !== element && key.includes(element)) {
-                if (!arrContain(actorsDict[element].children, key)){
+                if (!arrContain(actorsDict[element].children, key)) {
                     actorsDict[element].children.push(key);
                 }
                 notUnique = true;
             }
         });
 
-        if(notUnique){
+        if (notUnique) {
             value.unique = !notUnique;
             continue;
         }
 
-        if(!key.includes("_") || value.stories.length > 1){
+        if (!key.includes("_") || value.stories.length > 1) {
             uniqueActors.push(key);
             value.unique = true
         }
 
     }
 
-    uniqueActors.forEach(actorUnique => { 
+    uniqueActors.forEach(actorUnique => {
         let actorNode = {
             name: transformActorName(actorUnique),
             children: [],
@@ -167,8 +192,19 @@ async function createActorTree(data){
         rootNode.children.push(actorNode);
     });
 
-    saveTree(rootNode);
-    
+
+    await createEntityGraph({
+        projectId: projectId,
+        stories: stories,
+        actorTree: Object.assign({}, rootNode)
+    });
+
+    await saveTree(rootNode);
+
+    return {
+        actorsDict: actorsDict
+    };
+
 }
 
 /**
@@ -193,16 +229,26 @@ function getItem(story, item) {
             if (story.tokens.action && story.tokens.action.main_object) {
                 return story.tokens.action.main_object.text;
             }
+            return null;
+        case 'benefit-verb':
+            if (story.tokens.benefit && story.tokens.benefit.main_verb) {
+                return story.tokens.benefit.main_verb;
+            }
+            return null;
+        case 'benefit-object':
+            if (story.tokens.benefit && story.tokens.benefit.main_object) {
+                return story.tokens.benefit.main_object.text;
+            }
+            return null;
         default:
-            break;
+            return null;
     }
 }
 
-async function createStoryTree(data){
+async function createStoryTree(data) {
     const projectId = data.projectId;
-    const storiesAdded = data.stories;
+    const stories = data.stories;
 
-    const stories = await Story.find({ project_id: projectId });
     await TreeNode.deleteMany({ project_id: projectId, nodeType: "story-tree" });
 
     let treeData = {
@@ -214,8 +260,6 @@ async function createStoryTree(data){
     };
 
     let actors = [];
-
-    console.log({len: stories.length});
 
     for (let i = 0; i < stories.length; i++) {
         let story = stories[i];
@@ -232,7 +276,7 @@ async function createStoryTree(data){
             };
 
             let actionVerb = getItem(story, 'action-verb');
-            if(actionVerb){
+            if (actionVerb) {
                 newChild = {
                     name: actionVerb,
                     project_id: projectId,
@@ -242,7 +286,7 @@ async function createStoryTree(data){
                 };
 
                 let actionObject = getItem(story, 'action-object');
-                if(actionObject){
+                if (actionObject) {
                     newChild.children.push(
                         {
                             name: actionObject,
@@ -274,7 +318,7 @@ async function createStoryTree(data){
                             children: []
                         };
 
-                        if(object){
+                        if (object) {
                             newNode.children.push({
                                 name: object,
                                 project_id: projectId,
@@ -285,17 +329,17 @@ async function createStoryTree(data){
                         }
 
                         child.children.push(newNode);
-                    } else if(item && object){
-                        for(let k=0; k < child.children.length; k++){
+                    } else if (item && object) {
+                        for (let k = 0; k < child.children.length; k++) {
                             let grandchild = child.children[k];
-                            if(grandchild.name.toLowerCase() === item.toLowerCase()){
+                            if (grandchild.name.toLowerCase() === item.toLowerCase()) {
                                 grandchild.story_ids.push(story._id);
-                                grandchild.children.push({ 
-                                    name: object, 
+                                grandchild.children.push({
+                                    name: object,
                                     project_id: projectId,
                                     nodeType: 'story-tree',
                                     story_ids: [story._id],
-                                    children: [] 
+                                    children: []
                                 });
                             }
                         }
@@ -305,15 +349,213 @@ async function createStoryTree(data){
         }
     }
 
-    console.log(treeData);
-
-    saveTree(treeData);
+    await saveTree(treeData);
 
 
 
 }
 
+const stopWords = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your","yours","yourself","yourselves","he","him","his","himself","she","her","hers","herself","it","its","itself","they"
+,"them","their","theirs","themselves","what","which","who","whom","this","that","these","those","am","is","are","was","were","be","been","being","have","has","had","having","do ","does","did","doing","a","an","the","and","but","if","or","because","as","until","while","of","at","by","for","with","about","against","between","into","through","during","before","after","above","below","to","from","up","down"
+,"in ","out","on","off","over","under","again","further","then","once","here","there","when","where","why","how","all","any","both","each","few","more","most","other","some","such","no","nor","not","only","own","same","so","than","too","very","s","t","can","will","just","don","should","now"]
+
+function preprocessWord(word){
+    if (stopWords.includes(word)) {
+        return false;
+    }
+    if(word.charAt(word.length - 1) === ","){
+        word = word.substr(0, word.length - 1);
+    }
+    return word;
+}
+
+async function createWordCloud(data) {
+    const projectId = data.projectId;
+    const stories = data.stories;
+    const actorsDict = data.actorsDict;
+
+    await ProjectMeta.deleteMany({project_id: projectId, type: "word-cloud"});
+
+    wordDict = {};
+
+    for (let i = 0; i < stories.length; i++) {
+        let story = stories[i];
+        let action = getItem(story, "action");
+        let actionVerb = getItem(story, "action-verb");
+        let actionObject = getItem(story, "action-object");
+        let benefit = getItem(story, "benefit");
+        let benefitVerb = getItem(story, "benefit-verb");
+        let benefitObject = getItem(story, "benefit-object");
+
+        let actionWords = action.split(" ");
+
+        for (let i = 0; i < actionWords.length; i++) {
+            let word = actionWords[i].toLowerCase();
+            word = preprocessWord(word);
+            if (!word) {
+                continue;
+            }
+            let value = 1;
+            switch (word) {
+                case actionVerb:
+                    value = 3;
+                    break;
+                case actionObject:
+                    value = 3;
+                    break;
+                default:
+                    break;
+            }
+
+            if (!wordDict[word]) {
+                wordDict[word] = value;
+            } else {
+                wordDict[word] += value;
+            }
+        }
+
+        if (benefit && benefit.length > 0) {
+            let benefitWords = benefit.split(" ");
+
+            for (let i = 0; i < benefitWords.length; i++) {
+                let word = benefitWords[i].toLowerCase();
+                word = preprocessWord(word);
+                if(!word){
+                    continue;
+                }
+                let value = 1;
+                switch (word) {
+                    case benefitVerb:
+                        value = 2;
+                        break;
+                    case benefitObject:
+                        value = 2
+                        break;
+                    default:
+                        break;
+                }
+
+                if (!wordDict[word]) {
+                    wordDict[word] = value;
+                } else {
+                    wordDict[word] += value;
+                }
+            }
+        }
+    }
+
+    const actorKeys = Object.keys(actorsDict);
+    for (let i = 0; i < actorKeys.length; i++) {
+        let actorKey = actorKeys[i];
+        let actor = actorKeys[i].split("_").join(" ");
+        value = parseInt(actorsDict[actorKey].stories.length);
+        if (!wordDict[actor]) {
+            wordDict[actor] = value * 3;
+        } else {
+            wordDict[actor] += (value * 3);
+        }
+    }
+
+    let wordCloudData = new ProjectMeta({
+        data: wordDict,
+        project_id: projectId,
+        type: "word-cloud"
+    });
+
+    let wordCloud = await wordCloudData.save();
+
+}
+
+var idGlobal = 0;
+function recActorTree(root, parentId, nodes, links, stories){
+    let newNode = {id: idGlobal, name: root.name, story_ids: root.story_ids, nodeType: "actor"};
+    nodes.push(newNode);
+    idGlobal += 1;
+    if(parentId !== null){
+        let newLink = {source: newNode.id, target: parentId, relation: "is-a", linkType:"is-a"};
+        links.push(newLink)
+    }
+
+
+    let childStories = [];
+    if(root.children && root.children.length > 0){
+        for(let i=0; i<root.children.length; i++){
+            let childRoot = root.children[i];
+            recActorTree(childRoot, newNode.id, nodes, links, stories);
+            childStories = childStories.concat(childRoot.story_ids);
+        }
+    }
+
+    if(root.story_ids){
+        root.story_ids = root.story_ids.filter(elem => !arrContain(childStories, elem));
+    }
+
+    if(root.story_ids && root.story_ids.length > 0){
+        for(let i=0; i<root.story_ids.length; i++){
+            let story_id = root.story_ids[i];
+            let story;
+            for(let j=0; j<stories.length; j++){
+                if(story_id === stories[j]._id){
+                    story = stories[j];
+                    break
+                }
+            }
+            if(!story){
+                continue;
+            }
+            let actionVerb = getItem(story, "action-verb");
+            let actionObject = getItem(story, "action-object");
+            let benefitVerb = getItem(story, "benefit-verb");
+            let benefitObject = getItem(story, "benefit-object");
+
+            let actionNode;
+            if(actionVerb && actionObject){
+                actionNode = {id: idGlobal, name: actionObject, story_ids:[story._id], nodeType: "action"};
+                idGlobal += 1;
+                nodes.push(actionNode);
+
+                let actionLink = {source: newNode.id, target: actionNode.id, relation: actionVerb, linkType: "action"}
+                links.push(actionLink);
+            }
+
+            if(actionNode && benefitVerb && benefitObject){
+                let benefitNode = { id: idGlobal, name: benefitObject, story_ids: [story._id], nodeType: "benefit" };
+                idGlobal += 1;
+                nodes.push(benefitNode);
+
+                let benefitLink = { source: actionNode.id, target: benefitNode.id, relation: benefitVerb, linkType: "benefit" }
+                links.push(benefitLink);
+            }
+        }
+    }
+}
+
+async function createEntityGraph(data){
+    const projectId = data.projectId;
+    const stories = data.stories;
+    const actorTree = data.actorTree;
+
+    await ProjectMeta.deleteMany({project_id: projectId, type:"entity-graph"});
+
+    nodes = [];
+    links = [];
+
+    recActorTree(actorTree, null, nodes, links, stories);
+
+    const entityGraph = {
+        nodes: nodes,
+        links: links
+    };
+
+    let entityGraphData = new ProjectMeta({
+        data: entityGraph,
+        project_id: projectId,
+        type: "entity-graph"
+    });
+
+    await entityGraphData.save();
+}
+
 module.exports = {
-    createActorTree: createActorTree,
-    createStoryTree: createStoryTree
+    createGraphs: createGraphs
 }

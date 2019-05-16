@@ -173,7 +173,7 @@ class CollapsibleTree extends Component {
 
         return (
             <div className="tree-container">
-                <svg height={height} width={width} transform={`translate(${margin.y}, ${margin.x})`}>
+                <svg height={height} width={width} transform={`translate(${margin.x}, ${margin.y})`}>
                     <g>
                         {
                             nodeArr.map(

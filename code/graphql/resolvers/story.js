@@ -44,8 +44,7 @@ module.exports = {
                 stories: [story]
             };
 
-            await storyTree.createActorTree(data);
-            await storyTree.createStoryTree(data);
+            await storyTree.createGraphs(data);
 
             const createdStory = transformStory(result);
 
@@ -71,8 +70,7 @@ module.exports = {
                 stories: stories
             };
 
-            await storyTree.createActorTree(data);
-            await storyTree.createStoryTree(data);
+            await storyTree.createGraphs(data);
 
             return stories.map(story => {
                 return transformStory(story)

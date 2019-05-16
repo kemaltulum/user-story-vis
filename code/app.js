@@ -44,12 +44,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 //const api = require('./routes/index');
 //app.use('/api', api);
 
-app.get('/api', async (req, res) => {
-    let user_story = 'As a user, I want to go to school.';
-  
-    let result = await parseSingle(user_story);
-    res.json({ status: "SUCCESSFUL", parsed: result });
-  });
 
 // Mongoose Setup
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds163825.mlab.com:63825/${process.env.MONGO_DB}`);

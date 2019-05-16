@@ -98,7 +98,7 @@ const transformStory = (story) => {
     return {
         ...story._doc,
         _id: story.id,
-        project_id: project.bind(this, project.creator)
+        project_id: project.bind(this, story._doc.project_id)
     }
 }
 
@@ -110,6 +110,15 @@ const transformTreeNode = (treeNode) => {
     };
 }
 
+const transformMetaData = (projectMeta) => {
+    console.log(projectMeta._doc);
+    return {
+        ...projectMeta._doc,
+        _id: projectMeta.id
+    }
+}
+
 exports.transformProject = transformProject;
 exports.transformStory = transformStory;
 exports.transformTreeNode = transformTreeNode;
+exports.transformMetaData = transformMetaData;

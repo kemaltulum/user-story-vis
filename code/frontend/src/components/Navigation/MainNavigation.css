@@ -7,7 +7,7 @@
 }
 
 .project-links {
-  background-color: #8948FC;
+  background-color: #dbcafc;
   width: 70px;
   height: 100vh;
   position: fixed;
@@ -50,7 +50,7 @@
 
 .project-links__add{
   font-size: 48px;
-  color: #8948FC;
+  color: #dbcafc;
 }
 
 .project-links__circle:hover{
