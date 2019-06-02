@@ -9,5 +9,6 @@ As a signed user, I want to see different actors and the relations between them
 As a signed user, I want to filter user stories based on actors and keyword, so that I can focus on different parts of a project
 As a signed user, I want to sort user stories based on actor
 As a project manager, I want to create projects of my company
-As a project manafer, I want to assign projects to employees, so that we can collaborate with each other
+As a project manager, I want to assign projects to employees, so that we can collaborate with each other
+As a project manager, I want to assign effort estimates for a user story, so that I can estimate the overall effort needed for the project
 
