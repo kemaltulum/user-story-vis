@@ -25,6 +25,17 @@ function getStories(projectId, token){
                             object
                         }
                     }
+                    benefit {
+                            main_verb
+                            main_object {
+                                chunk
+                                text
+                            }
+                            sec_verbs {
+                                verb
+                                object
+                            }
+                        }
                 }
             }
         }
@@ -178,6 +189,17 @@ function getStoryTree(projectId, nodeType, token) {
                                 object
                             }
                         }
+                        benefit {
+                            main_verb
+                            main_object {
+                                chunk
+                                text
+                            }
+                            sec_verbs {
+                                verb
+                                object
+                            }
+                        }
                     }
             }
             isRoot
@@ -256,6 +278,17 @@ function addStorySingle(projectId, fullText, token) {
                             object
                         }
                     }
+                    benefit {
+                            main_verb
+                            main_object {
+                                chunk
+                                text
+                            }
+                            sec_verbs {
+                                verb
+                                object
+                            }
+                        }
                 }
             }
         }
@@ -298,6 +331,17 @@ function addStoryBulkRaw(projectId, rawText, token) {
                             object
                         }
                     }
+                    benefit {
+                            main_verb
+                            main_object {
+                                chunk
+                                text
+                            }
+                            sec_verbs {
+                                verb
+                                object
+                            }
+                        }
                 }
             }
         }

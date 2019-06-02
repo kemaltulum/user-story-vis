@@ -450,9 +450,9 @@ async function createWordCloud(data) {
         let actor = actorKeys[i].split("_").join(" ");
         value = parseInt(actorsDict[actorKey].stories.length);
         if (!wordDict[actor]) {
-            wordDict[actor] = value * 3;
+            wordDict[actor] = value * 2;
         } else {
-            wordDict[actor] += (value * 3);
+            wordDict[actor] += (value * 2);
         }
     }
 

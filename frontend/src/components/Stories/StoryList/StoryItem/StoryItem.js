@@ -30,18 +30,18 @@ class StoryItem extends React.Component {
                             <Fragment>
                                 <div className="stories__summary">
                                     <div className="summary-actor">
-                                        {this.props.actor}
+                                        <strong>As</strong> {this.props.actor}
                                     </div>
                                     {
                                         this.props.tokens.action.main_verb &&
                                         <div className="summary-verb">
-                                            {this.props.tokens.action.main_verb}
+                                        <strong>I want to</strong> {this.props.tokens.action.main_verb} &#8594; {this.props.tokens.action.main_object && <span> {this.props.tokens.action.main_object.text} </span>}
                                         </div>
                                     }
                                     {
-                                        this.props.tokens.action.main_object &&
+                                        (this.props.tokens.benefit && this.props.tokens.benefit.main_verb && this.props.tokens.benefit.main_object) &&
                                         <div className="summary-object">
-                                            {this.props.tokens.action.main_object.text}
+                                        <strong>so that</strong> {this.props.tokens.benefit.main_verb} &#8594;{this.props.tokens.benefit.main_object.text}
                                         </div>
                                     }
                                 </div>

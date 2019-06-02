@@ -19,7 +19,7 @@ async function parse(story_single){
 
     try {
         //const { stdout, stderr } = await exec('python3 lang-py/spacy-parser.py "' + story_single + '"');
-        const { stdout, stderr } = await execFile('python3', ['lang-py/spacy-parser.py', story_single]);
+        const { stdout, stderr } = await execFile('python3', ['../lang-py/spacy-parser.py', story_single]);
 
         let parse_result = JSON.parse(stdout);
 
@@ -152,7 +152,7 @@ async function parse(story_single){
 
 async function parseAll(stories){
     try {
-        let args = ['lang-py/spacy-parser.py'];
+        let args = ['../lang-py/spacy-parser.py'];
         args = args.concat(stories);
         const { stdout, stderr } = await execFile('python3', args);
         //const { stdout, stderr } = await exec('python3 lang-py/spacy-parser.py ' + stories.map(story => ' "' + story + '" '));

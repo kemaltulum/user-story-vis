@@ -53,13 +53,13 @@ class CollapsibleTree extends Component {
 
     font(text) {
         if (text && text.length >= 24) {
-            return "11px";
-        } else if (text && text.length >= 20) {
             return "12px";
-        } else if (text && text.length > 15) {
+        } else if (text && text.length >= 20) {
             return "13px";
-        } else {
+        } else if (text && text.length > 15) {
             return "15px";
+        } else {
+            return "17px";
         }
     }
 
@@ -213,10 +213,10 @@ class CollapsibleTree extends Component {
                                                     <Fragment>
                                                         {
                                                             ((config.data.children && config.data.children.length > 0) || (config.data.children2 && config.data.children2.length > 0)) ?
-                                                                <rect onClick={this.handleStoriesClick.bind(this, config.data.stories)} className="node-cursor" height="13" width="82.230823" y="43.461531" x="2.615396" strokeOpacity="null" strokeWidth="1" stroke="#261D3D" fill="#261D3D" /> :
-                                                                <rect onClick={this.handleStoriesClick.bind(this, config.data.stories)} className="node-cursor" height="13" width="136" y="43.461531" x="2.615396" strokeOpacity="null" strokeWidth="1" stroke="#261D3D" fill="#261D3D" />
+                                                                <rect onClick={this.handleStoriesClick.bind(this, config.data.stories)} className="node-cursor" height="18" width="82.230823" y="39.461531" x="2.615396" strokeOpacity="null" strokeWidth="1" stroke="#261D3D" fill="#261D3D" /> :
+                                                                <rect onClick={this.handleStoriesClick.bind(this, config.data.stories)} className="node-cursor" height="18" width="136" y="39.461531" x="2.615396" strokeOpacity="null" strokeWidth="1" stroke="#261D3D" fill="#261D3D" />
                                                         }
-                                                        <text onClick={this.handleStoriesClick.bind(this, config.data.stories)} className="node-cursor" textAnchor="start" fontFamily="Helvetica, Arial, sans-serif" fontSize="10" id="svg_7" y="53.076916" x="27.615463" fillOpacity="null" strokeOpacity="null" strokeWidth="0" stroke="#000" fill="#fff">Stories</text>
+                                                        <text onClick={this.handleStoriesClick.bind(this, config.data.stories)} className="node-cursor" textAnchor="start" fontFamily="Helvetica, Arial, sans-serif" fontSize="12"  y="53.076916" x="27.615463" fillOpacity="null" strokeOpacity="null" strokeWidth="0" stroke="#000" fill="#fff">Stories</text>
                                                     </Fragment>
                                                 }
                                                 <text transform="matrix(0.970731, 0, 0, 1, 0.321963, 0)" textAnchor="start" fontFamily="Helvetica, Arial, sans-serif" fontSize={this.font(config.data.name)} id="svg_9" y="28" x="11" fillOpacity="null" strokeOpacity="null" strokeWidth="0" stroke="#000" fill="#000000">
