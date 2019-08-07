@@ -3,7 +3,7 @@ import randomColor from 'randomcolor';
 import ReactWordcloud from "react-wordcloud";
 
 
-import './WordCloud.css';
+import './WordCloud.scss';
 
 import { connect } from 'react-redux';
 

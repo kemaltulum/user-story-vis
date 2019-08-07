@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 
-import './Auth.css';
+import './Auth.scss';
 import { authActions } from '../actions/auth.actions';
 
 class AuthPage extends Component {

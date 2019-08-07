@@ -8,7 +8,7 @@ import StoryList from '../components/Stories/StoryList/StoryList';
 import { connect } from 'react-redux';
 
 import { storyActions } from '../actions/story.actions';
-import './Story.css';
+import './Story.scss';
 
 class StoryPage extends Component {
     state = {

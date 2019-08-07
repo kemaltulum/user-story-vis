@@ -1,7 +1,10 @@
+
+@import "../../../../variables.scss";
+
 .stories__card{
   width: 240px;
   height: 240px;
-  background: #dbcafc;
+  background: $lightest-color;
   position: relative;
   border-radius: 10px;
   padding: 24px 16px 8px 16px;;
@@ -60,15 +63,15 @@
   border-radius: 4px;
 }
 .stories__full-text .actor {
-  background-color: rgb(185, 126, 240);
+  background-color: rgba(#FFDB5C, 0.8);
 }
 
 .stories__full-text .action {
-  background-color: rgb(245, 187, 100);
+  background-color: rgba(#FA6E59, 0.8);
 }
 
 .stories__full-text .benefit {
-  background-color: rgb(147, 247, 133)
+  background-color: rgba(#F8A055, 0.8);
 }
 
 .stories__list-item a{
@@ -81,7 +84,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: #261D3D;
+  background: $normal-color;
   border-radius: 0 0 100% 0;
   box-sizing: border-box;
   padding-top: 2px;
@@ -118,7 +121,7 @@
   padding: 0;
   cursor: pointer;
   z-index: 1;
-  background: #261D3D;
+  background: $normal-color;
   border-radius: 0 10px 10px 0;
   color: white;
   display: flex;

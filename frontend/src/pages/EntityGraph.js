@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 
-import './EntityGraph.css';
+import './EntityGraph.scss';
 
 import { connect } from 'react-redux';
 

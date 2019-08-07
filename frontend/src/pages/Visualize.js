@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import './Visualize.css';
+import './Visualize.scss';
 
 import { connect } from 'react-redux';
 

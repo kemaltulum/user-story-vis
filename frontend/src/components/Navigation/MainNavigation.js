@@ -7,7 +7,7 @@ import { projectActions } from '../../actions/project.actions';
 
 import { withRouter } from 'react-router-dom';
 
-import './MainNavigation.css';
+import './MainNavigation.scss';
 
 // #8948FC
 
@@ -86,7 +86,7 @@ class MainNavigation extends Component {
             <ul>
               {this.state.projectID && (
                 <React.Fragment>
-                  <li>
+                  <li className="">
                     <NavLink to={"/" + this.state.projectID + "/stories"}>Card View</NavLink>
                   </li>
                 </React.Fragment>

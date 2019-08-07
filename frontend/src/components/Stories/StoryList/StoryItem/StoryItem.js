@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import ReactCardFlip from 'react-card-flip';
 
-import './StoryItem.css';
+import './StoryItem.scss';
 
 
 class StoryItem extends React.Component {

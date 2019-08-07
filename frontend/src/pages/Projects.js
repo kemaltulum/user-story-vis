@@ -8,7 +8,7 @@ import ProjectList from '../components/Projects/ProjectList/ProjectList';
 import { connect } from 'react-redux';
 import { projectActions } from '../actions/project.actions';
 
-import './Projects.css';
+import './Projects.scss';
 
 class ProjectsPage extends Component {
     state = {

@@ -1,3 +1,6 @@
+@import "../../variables.scss";
+
+
 .main-navigation {
   position: fixed;
   left: 0;
@@ -7,7 +10,7 @@
 }
 
 .project-links {
-  background-color: #dbcafc;
+  background-color: $lightest-color;
   width: 70px;
   height: 100vh;
   position: fixed;
@@ -20,7 +23,7 @@
 }
 
 .project-links a.active .project-links__circle{
-  border: 2px solid #d61a0d;
+  border: 4px solid $normal-color;
 }
 
 .project-links h2{
@@ -31,7 +34,7 @@
 }
 
 .project-links__circle{
-  color: #534C65;
+  color: $text-color;
   width: 58px;
   height: 58px;
   margin: 20px 6px;
@@ -42,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: $bg-white;
   cursor: pointer;
   box-sizing: border-box;
 }
@@ -54,7 +57,7 @@
 }
 
 .project-links__circle:hover{
-  border: 4px solid #261D3D;
+  border: 4px solid $light-color;
 }
 
 
@@ -64,7 +67,7 @@
 .main-navigation__logo h1 {
   margin: 10px 0;
   font-size: 1.5rem;
-  color: #dfcefc;
+  color: white;
   text-align: center
 }
 
@@ -74,7 +77,7 @@
   top: 0;
   width: 180px;
   height: 100vh;
-  background: #261D3D;
+  background: $dark-color;
   box-sizing: border-box;
 }
 
@@ -86,20 +89,22 @@
 }
 
 .main-navigation__items li {
-  margin: 0 1rem;
+  margin: 0.5rem 0;
 }
 
 .main-navigation__items a,
 .main-navigation__items button {
   text-decoration: none;
   color: white;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0;
   border: none;
   font: inherit;
   background: transparent;
   cursor: pointer;
   vertical-align: middle;
   margin: 0;
+  width: 100%;
+  display: block;
 }
 
 .main-navigation__items a:hover,
@@ -107,9 +112,7 @@
 .main-navigation__items a.active,
 .main-navigation__items button:hover,
 .main-navigation__items button:active {
-  background: #ffffff;
-  color: #5101d1;
-  border-radius: 5px;
+  background: rgba($lightest-color, 0.25);
 }
 
 .main-navigation__logout{
