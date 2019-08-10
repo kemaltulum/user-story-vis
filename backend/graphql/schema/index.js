@@ -91,6 +91,11 @@ type ProjectMeta {
   data: JSONObject!
 }
 
+type DeleteProjectResult {
+  projectId: ID!,
+  status: Boolean!
+}
+
 input StoryInput {
   project_id: String!
   full_text: String!
@@ -115,6 +120,7 @@ type RootMutation {
   createUser(userInput: UserInput): User!
   addStory(storyInput: StoryInput): Story!
   addStoryBulkRaw(rawText: String!, projectId: String!): [Story!]!
+  deleteProject(projectId: ID!): DeleteProjectResult
 }
 
 schema {

@@ -62,5 +62,25 @@ module.exports = {
         } catch (error) {
             throw error;
         }
+    }, deleteProject: async(args, req) => {
+        try {
+            const projectId = args.projectId;
+
+            let projectDeleteResult = await Project.deleteOne({_id: projectId});
+
+            let status = true;
+
+            if (projectDeleteResult.deletedCount < 1) {
+                status = false;
+            }
+
+            return {
+                projectId: projectId,
+                status: status
+            };
+            
+        } catch (error) {
+            throw error;
+        }
     }
 };
