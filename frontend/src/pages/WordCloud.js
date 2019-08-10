@@ -13,6 +13,7 @@ import Spinner from '../components/Spinner/Spinner';
 
 
 import { projectActions } from '../actions/project.actions';
+import { UIActions } from '../actions/ui.actions';
 
 
 
@@ -27,7 +28,7 @@ class WordCloudPage extends Component {
     }
 
     componentDidMount() {
-        console.log("Welcome to word cloud");
+        this.props.showMainNav(true);
         this.props.getMetaData(this.props.match.params.project_id, "word-cloud", this.props.token);
 
     }
@@ -115,6 +116,9 @@ function mapDispatchToProps(dispatch) {
     return {
         getMetaData: (projectId, type, token) => {
             dispatch(projectActions.getMetaData(projectId, type, token));
+        },
+        toggleNav: (showMainNav) => {
+            dispatch(UIActions.toggleNav(showMainNav))
         }
     }
 }

@@ -10,8 +10,10 @@ import Spinner from '../components/Spinner/Spinner';
 
 
 
-import { storyActions } from '../actions/story.actions';
+
 import { projectActions } from '../actions/project.actions';
+import { UIActions } from '../actions/ui.actions';
+
 
 import { Graph } from 'react-d3-graph';
 
@@ -57,7 +59,7 @@ class EntityGraphPage extends Component {
     }
 
     componentDidMount() {
-        console.log("Welcome to entity graph");
+        this.props.showMainNav(true);
         this.props.getStoriesGraph(this.props.match.params.project_id, 'entity-graph', this.props.token);
 
     }
@@ -146,6 +148,9 @@ function mapDispatchToProps(dispatch) {
     return {
         getStoriesGraph: (projectId, type, token) => {
             dispatch(projectActions.getMetaData(projectId, type, token));
+        },
+        toggleNav: (showMainNav) => {
+            dispatch(UIActions.toggleNav(showMainNav))
         }
     }
 }

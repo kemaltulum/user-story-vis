@@ -12,6 +12,7 @@ import WordCloudPage from './pages/WordCloud';
 import EntityGraphPage from './pages/EntityGraph';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
+import {UIActions } from './actions/ui.actions';
 
 
 class App extends Component {
@@ -66,10 +67,10 @@ class App extends Component {
     return (
       <BrowserRouter>
         <React.Fragment>
-          {this.props.token && 
+          {(this.props.token && this.props.showMainNav) && 
             <MainNavigation /> 
           }
-            <main className="main-content">
+            <main className="main-content" style={{marginLeft: this.props.showMainNav ? "250px" : "0"}}>
               <Switch>
                 {this.props.token && <Redirect from="/" to="/projects" exact />}
               {this.props.token && (
@@ -105,9 +106,11 @@ class App extends Component {
 function mapStateToProps(state){
   const {token, userId} = state.auth;
   const { projects } = state.project;
+  const { showMainNav } = state.ui;
   return {
     token,
-    userId
+    userId,
+    showMainNav
   };
 }
 
@@ -115,6 +118,9 @@ function mapDispatchToProps(dispatch) {
   return {
     logout: () => {
       dispatch(authActions.logout());
+    },
+    toggleNav: (showMainNav) => {
+      dispatch(UIActions.toggleNav(showMainNav))
     }
   };
 }

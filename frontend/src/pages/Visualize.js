@@ -12,32 +12,7 @@ import StoryList from '../components/Stories/StoryList/StoryList';
 
 
 import { storyActions } from '../actions/story.actions';
-
-const myTreeData = [
-    {
-        name: 'Actor',
-        children: [
-            {
-                name: 'User',
-            },
-            {
-                name: 'Admin',
-            }
-        ],
-    }
-];
-
-class NodeLabel extends React.PureComponent {
-    render() {
-        const { className, nodeData } = this.props
-        return (
-            <div className={className}>
-                <h2>{nodeData.name}</h2>
-            </div>
-        )
-    }
-}
-
+import { UIActions } from '../actions/ui.actions';
 
 class VisualizePage extends Component {
     
@@ -55,6 +30,7 @@ class VisualizePage extends Component {
     }
     
     componentDidMount() {
+        this.props.toggleNav(true);
         
         const params = new URLSearchParams(this.props.location.search);
         const type = params.get('type'); // bar
@@ -162,6 +138,9 @@ function mapDispatchToProps(dispatch) {
     return {
         getStoriesTree: (projectId, type, token) => {
             dispatch(storyActions.getStoriesTree(projectId, type, token));
+        },
+        toggleNav: (showMainNav) => {
+            dispatch(UIActions.toggleNav(showMainNav))
         }
     }
 }

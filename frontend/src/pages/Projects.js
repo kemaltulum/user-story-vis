@@ -7,6 +7,8 @@ import ProjectList from '../components/Projects/ProjectList/ProjectList';
 
 import { connect } from 'react-redux';
 import { projectActions } from '../actions/project.actions';
+import { UIActions } from '../actions/ui.actions';
+
 
 import './Projects.scss';
 
@@ -25,6 +27,7 @@ class ProjectsPage extends Component {
     }
 
     componentDidMount() {
+        this.props.toggleNav(false)
         this.fetchProjects();
     }
 
@@ -132,6 +135,9 @@ function mapDispatchToProps(dispatch) {
         },
         createProject: (name, description, token) => {
             dispatch(projectActions.createProject(name, description, token));
+        },
+        toggleNav: (showMainNav) => {
+            dispatch(UIActions.toggleNav(showMainNav))
         }
     };
 }

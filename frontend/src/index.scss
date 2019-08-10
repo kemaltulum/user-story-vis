@@ -34,9 +34,8 @@ body {
 
 .form-actions button,
 .btn {
-  background: #261D3D;
+  background: $normal-color;
   font: inherit;
-  border: 1px solid #261D3D;
   border-radius: 3px;
   padding: 0.25rem 1rem;
   margin-right: 1rem;
@@ -46,9 +45,8 @@ body {
 }
 
 .form-select{
-  background: #261D3D;
+  background: $normal-color;
   font: inherit;
-  border: 1px solid #261D3D;
   border-radius: 3px;
   padding: 0.25rem 1rem;
   margin-right: 1rem;
@@ -62,23 +60,20 @@ body {
 }
 
 .form-actions .btn.btn-secondary {
-  background: #700154;
-  border-color: #700154;
+  background: $normal-color;
+  border-color: $normal-color;
 }
 
 .form-actions .btn.btn-secondary:hover,
-.form-actions .btn.btn-secondary:active {
-  background: #92026e;
-  border-color: #92026e;
-}
-
+.form-actions .btn.btn-secondary:active,
 .form-actions button:hover,
 .form-actions button:active,
 .btn:hover,
 .btn:active {
-  background: #6219d6;
-  border-color: #6219d6;
+  background: $light-color;
+  border-color: $light-color;
 }
+
 
 .clearfix::after {
   content: "";

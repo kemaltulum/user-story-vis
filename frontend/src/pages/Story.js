@@ -8,6 +8,8 @@ import StoryList from '../components/Stories/StoryList/StoryList';
 import { connect } from 'react-redux';
 
 import { storyActions } from '../actions/story.actions';
+import { UIActions } from '../actions/ui.actions';
+
 import './Story.scss';
 
 class StoryPage extends Component {
@@ -35,6 +37,7 @@ class StoryPage extends Component {
     componentDidMount() {
         this.props.getStories(this.props.match.params.project_id, this.props.token);
         this.props.getUniqueActors(this.props.match.params.project_id, this.props.token);
+        this.props.toggleNav(true);
     }
 
     componentDidUpdate(prevProps) {
@@ -199,6 +202,9 @@ function mapDispatchToProps(dispatch) {
         },
         filterStories: (projectId, actorFilter, keyword, token) => {
             dispatch(storyActions.filterStories(projectId, actorFilter, keyword, token));
+        },
+        toggleNav: (showMainNav) => {
+            dispatch(UIActions.toggleNav(showMainNav))
         }
     };
 }
