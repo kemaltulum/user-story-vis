@@ -6,6 +6,16 @@ function toggleNav(showMainNav) {
     })};
 }
 
+function toggleProjectModal(showProjectModal) {
+    return dispatch => {
+        dispatch({
+            type: 'TOGGLE_PROJECT_MODAL',
+            payload: { showProjectModal: showProjectModal }
+        });
+    }
+}
+
 export const UIActions = {
-    toggleNav
+    toggleNav,
+    toggleProjectModal
 }

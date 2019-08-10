@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { authActions } from '../../actions/auth.actions';
 import { projectActions } from '../../actions/project.actions';
+import { UIActions } from '../../actions/ui.actions';
+
 
 import { withRouter } from 'react-router-dom';
 
@@ -36,6 +38,9 @@ class MainNavigation extends Component {
     }
 
   }
+  addNewProjectHandler() {
+    this.props.toggleProjectModal(true);
+  }
   render() {
     return (
       <header className="main-navigation">
@@ -54,13 +59,11 @@ class MainNavigation extends Component {
               )
             })
           }
-          <NavLink to={"/projects"}>
-            <div>
+            <div onClick={this.addNewProjectHandler.bind(this)}>
               <div className="project-links__circle project-links__add" title="Add New Project">
                 +
               </div>
             </div>
-          </NavLink>
         </div>
 
         <nav className="main-navigation__items">
@@ -142,6 +145,9 @@ function mapDispatchToProps(dispatch) {
     },
     logout: () => {
       dispatch(authActions.logout());
+    },
+    toggleProjectModal: (showProjectModal) => {
+      dispatch(UIActions.toggleProjectModal(showProjectModal))
     }
   };
 }

@@ -32,28 +32,8 @@ class ProjectsPage extends Component {
     }
 
     startCreateEventHandler = () => {
-        this.setState({ creating: true });
+        this.props.toggleProjectModal(true);
     };
-
-    modalConfirmHandler = () => {
-        this.setState({ creating: false });
-        const name = this.nameElRef.current.value;
-        const description = this.descriptionElRef.current.value;
-
-        if (
-            name.trim().length === 0 ||
-            description.trim().length === 0
-        ) {
-            return;
-        }
-
-        this.props.createProject(name, description, this.props.token);
-        this.setState({ creating: false });
-    }
-
-    modalCancelHandler = () => {
-        this.setState({ creating: false });
-    }
 
     fetchProjects() {
         this.props.getProjects(this.props.token);
@@ -70,38 +50,12 @@ class ProjectsPage extends Component {
     render() {
         return (
             <React.Fragment>
-                {(this.state.creating) && <Backdrop />}
-                {this.state.creating && (
-                    <Modal
-                        title="Add Project"
-                        canCancel
-                        canConfirm
-                        onCancel={this.modalCancelHandler}
-                        onConfirm={this.modalConfirmHandler}
-                        confirmText="Confirm"
-                    >
-                        <form>
-                            <div className="form-control">
-                                <label htmlFor="name">Name</label>
-                                <input type="text" id="name" ref={this.nameElRef} />
-                            </div>
-                            <div className="form-control">
-                                <label htmlFor="description">Description</label>
-                                <textarea
-                                    id="description"
-                                    rows="4"
-                                    ref={this.descriptionElRef}
-                                />
-                            </div>
-                        </form>
-                    </Modal>
-                )}
                 {this.props.token && (
                     <div className="events-control">
                         <p>Add your project!</p>
                         <button className="btn" onClick={this.startCreateEventHandler}>
                             Create Project
-            </button>
+                        </button>
                     </div>
                 )}
                 {this.state.isLoading ? (
@@ -120,11 +74,13 @@ class ProjectsPage extends Component {
 
 function mapStateToProps(state) {
     const { token } = state.auth;
+    const { showProjectModal } = state.ui;
     const { projects, isLoading } = state.project;
     return {
         token,
         projects,
-        isLoading
+        isLoading,
+        showProjectModal
     };
 }
 
@@ -138,6 +94,9 @@ function mapDispatchToProps(dispatch) {
         },
         toggleNav: (showMainNav) => {
             dispatch(UIActions.toggleNav(showMainNav))
+        },
+        toggleProjectModal: (showProjectModal) => {
+            dispatch(UIActions.toggleProjectModal(showProjectModal))
         }
     };
 }

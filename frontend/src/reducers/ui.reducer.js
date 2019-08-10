@@ -8,6 +8,12 @@ const UIReducer = (state = {
                 ...action.payload
             };
             break;
+        case "TOGGLE_PROJECT_MODAL":
+            state = {
+                ...state,
+                ...action.payload
+            };
+            break;
         default:
             break;
     }

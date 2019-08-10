@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './App.scss';
+
+import Modal from './components/Modal/Modal';
+import Backdrop from './components/Backdrop/Backdrop';
 
 import AuthPage from './pages/Auth';
 import ProjectsPage from './pages/Projects';
@@ -13,11 +16,14 @@ import EntityGraphPage from './pages/EntityGraph';
 import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 import {UIActions } from './actions/ui.actions';
+import { projectActions } from './actions/project.actions';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.nameElRef = React.createRef();
+    this.descriptionElRef = React.createRef();
     /*
     if(localStorage.getItem('token') && localStorage.getItem('userId')){
       const query = `
@@ -58,18 +64,70 @@ class App extends Component {
       
     }
     */
-
-
-
   }
+
+  startCreateEventHandler = () => {
+    this.props.toggleProjectModal(true);
+  };
+
+  modalConfirmHandler = () => {
+    const name = this.nameElRef.current.value;
+    const description = this.descriptionElRef.current.value;
+
+    if (
+      name.trim().length === 0 ||
+      description.trim().length === 0
+    ) {
+      console.log("No description or name");
+    } else {
+      this.props.createProject(name, description, this.props.token);
+    }
+    this.props.toggleProjectModal(false);
+  }
+
+  modalCancelHandler = () => {
+    this.props.toggleProjectModal(false);
+  }
+
+  fetchProjects() {
+    this.props.getProjects(this.props.token);
+  }
+
+
+  
 
   render() {
     return (
       <BrowserRouter>
-        <React.Fragment>
+        <Fragment>
           {(this.props.token && this.props.showMainNav) && 
-            <MainNavigation /> 
+              <MainNavigation />
           }
+          {(this.props.showProjectModal) && <Backdrop />}
+          {this.props.showProjectModal && (
+            <Modal
+              title="Add Project"
+              canCancel
+              canConfirm
+              onCancel={this.modalCancelHandler}
+              onConfirm={this.modalConfirmHandler}
+              confirmText="Confirm">
+              <form>
+                <div className="form-control">
+                  <label htmlFor="name">Name</label>
+                  <input type="text" id="name" ref={this.nameElRef} />
+                </div>
+                <div className="form-control">
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    id="description"
+                    rows="4"
+                    ref={this.descriptionElRef}
+                  />
+                </div>
+              </form>
+            </Modal>
+          )}
             <main className="main-content" style={{marginLeft: this.props.showMainNav ? "250px" : "0"}}>
               <Switch>
                 {this.props.token && <Redirect from="/" to="/projects" exact />}
@@ -97,7 +155,7 @@ class App extends Component {
               {!this.props.token && <Redirect to="/auth" exact />}
               </Switch>
             </main>
-        </React.Fragment>
+        </Fragment>
       </BrowserRouter>
     );
   }
@@ -106,11 +164,12 @@ class App extends Component {
 function mapStateToProps(state){
   const {token, userId} = state.auth;
   const { projects } = state.project;
-  const { showMainNav } = state.ui;
+  const { showMainNav, showProjectModal } = state.ui;
   return {
     token,
     userId,
-    showMainNav
+    showMainNav,
+    showProjectModal
   };
 }
 
@@ -121,6 +180,12 @@ function mapDispatchToProps(dispatch) {
     },
     toggleNav: (showMainNav) => {
       dispatch(UIActions.toggleNav(showMainNav))
+    },
+    createProject: (name, description, token) => {
+      dispatch(projectActions.createProject(name, description, token));
+    },
+    toggleProjectModal: (showProjectModal) => {
+      dispatch(UIActions.toggleProjectModal(showProjectModal))
     }
   };
 }
