@@ -39,7 +39,7 @@ class MainNavigation extends Component {
 
   }
   addNewProjectHandler() {
-    this.props.toggleProjectModal(true);
+    this.props.showModal("CREATE_PROJECT");
   }
   render() {
     return (
@@ -146,8 +146,8 @@ function mapDispatchToProps(dispatch) {
     logout: () => {
       dispatch(authActions.logout());
     },
-    toggleProjectModal: (showProjectModal) => {
-      dispatch(UIActions.toggleProjectModal(showProjectModal))
+    showModal: (currentModal) => {
+      dispatch(UIActions.showModal(currentModal))
     }
   };
 }

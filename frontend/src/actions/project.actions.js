@@ -49,6 +49,30 @@ function createProject(name, description, token) {
     }
 }
 
+function deleteProject(projectId, token) {
+    return dispatch => {
+        dispatch({
+            type: 'DELETE_PROJECT_REQUEST',
+            payload: {}
+        });
+        projectService.deleteProject(projectId, token)
+            .then(
+                deleteProjectResult => {
+                    dispatch({
+                        type: 'DELETE_PROJECT',
+                        payload: { }
+                    });
+                },
+                error => {
+                    dispatch({
+                        type: 'PROJECTS_FAILURE',
+                        payload: { error }
+                    });
+                }
+            )
+    }
+}
+
 function getMetaData(projectId, type, token){
     return dispatch => {
         dispatch({
@@ -76,5 +100,6 @@ function getMetaData(projectId, type, token){
 export const projectActions = {
     getProjects,
     createProject,
-    getMetaData
+    getMetaData,
+    deleteProject
 };

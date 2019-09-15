@@ -17,6 +17,7 @@ import MainNavigation from './components/Navigation/MainNavigation';
 import { authActions }  from './actions/auth.actions';
 import {UIActions } from './actions/ui.actions';
 import { projectActions } from './actions/project.actions';
+import ModalConductor from './components/Modal/ModalConductor';
 
 
 class App extends Component {
@@ -66,29 +67,6 @@ class App extends Component {
     */
   }
 
-  startCreateEventHandler = () => {
-    this.props.toggleProjectModal(true);
-  };
-
-  modalConfirmHandler = () => {
-    const name = this.nameElRef.current.value;
-    const description = this.descriptionElRef.current.value;
-
-    if (
-      name.trim().length === 0 ||
-      description.trim().length === 0
-    ) {
-      console.log("No description or name");
-    } else {
-      this.props.createProject(name, description, this.props.token);
-    }
-    this.props.toggleProjectModal(false);
-  }
-
-  modalCancelHandler = () => {
-    this.props.toggleProjectModal(false);
-  }
-
   fetchProjects() {
     this.props.getProjects(this.props.token);
   }
@@ -103,31 +81,9 @@ class App extends Component {
           {(this.props.token && this.props.showMainNav) && 
               <MainNavigation />
           }
-          {(this.props.showProjectModal) && <Backdrop />}
-          {this.props.showProjectModal && (
-            <Modal
-              title="Add Project"
-              canCancel
-              canConfirm
-              onCancel={this.modalCancelHandler}
-              onConfirm={this.modalConfirmHandler}
-              confirmText="Confirm">
-              <form>
-                <div className="form-control">
-                  <label htmlFor="name">Name</label>
-                  <input type="text" id="name" ref={this.nameElRef} />
-                </div>
-                <div className="form-control">
-                  <label htmlFor="description">Description</label>
-                  <textarea
-                    id="description"
-                    rows="4"
-                    ref={this.descriptionElRef}
-                  />
-                </div>
-              </form>
-            </Modal>
-          )}
+            {(this.props.token) &&
+              <ModalConductor />
+            }
             <main className="main-content" style={{marginLeft: this.props.showMainNav ? "250px" : "0"}}>
               <Switch>
                 {this.props.token && <Redirect from="/" to="/projects" exact />}

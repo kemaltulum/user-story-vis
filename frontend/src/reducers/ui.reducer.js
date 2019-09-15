@@ -14,6 +14,18 @@ const UIReducer = (state = {
                 ...action.payload
             };
             break;
+        case "SHOW_MODAL":
+            state = {
+                ...state,
+                ...action.payload
+            }
+            break;
+        case "HIDE_MODAL":
+            state = {
+                ...state,
+                ...action.payload
+            }
+            break;
         default:
             break;
     }

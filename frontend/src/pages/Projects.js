@@ -58,7 +58,7 @@ class ProjectsPage extends Component {
                         </button>
                     </div>
                 )}
-                {this.state.isLoading ? (
+                {this.props.isLoading ? (
                     <Spinner />
                 ) : (
                      <ProjectList 

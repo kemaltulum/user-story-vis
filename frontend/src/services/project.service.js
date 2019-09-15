@@ -82,6 +82,29 @@ function getMetaData(project_id, type, token){
         });
 }
 
+function deleteProject(project_id, token){
+    const query =
+        `
+        query DeleteProject($project_id: ID!) {
+            deleteProject(projectId: $project_id) {
+              projectId,
+              status
+            }
+          }
+    `;
+
+    const variables = {
+        project_id: project_id
+    }
+
+    return graph(query, variables, token)
+        .then(handleResponse)
+        .then(responseData => {
+            const deleteProject = responseData.data.deleteProject;
+            return deleteProject;
+        });
+}
+
 function handleResponse(res) {
     let errorExists = false;
     if (res.status !== 200 && res.status !== 201) {
@@ -101,5 +124,6 @@ function handleResponse(res) {
 export const projectService = {
     getProjects,
     createProject,
-    getMetaData
+    getMetaData,
+    deleteProject
 };

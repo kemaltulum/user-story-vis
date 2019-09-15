@@ -19,13 +19,29 @@ const projectReducer = (state = {
         case 'GET_PROJECTS':
             state = {
                 ...state,
-                ...action.payload
+                ...action.payload,
+                isLoading: false
             };
             break;
         case 'CREATE_PROJECT':
             state = {
                 ...state,
-                ...action.payload
+                ...action.payload,
+                isLoading: false
+            };
+            break;
+        case 'DELETE_PROJECT':
+            state = {
+                ...state,
+                ...action.payload,
+                isProjectDeleted: false
+            };
+            break;
+        case 'DELETE_PROJECT_REQUEST':
+            state = {
+                ...state,
+                ...action.payload,
+                isProjectDeleted: true
             };
             break;
         case 'GET_METADATA':
